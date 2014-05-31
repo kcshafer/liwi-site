@@ -15,9 +15,9 @@ def artlover_form(request):
         user_form = CustomerRegistration(data=request.POST)
         print user_form.errors
         if user_form.is_valid():
-            print "in save"
+            user_form.cleaned_data['type'] = 'artistlover'
             user = user_form.save()
-
+            user.type = 'customer'
             user.set_password(user.password)
             user.save()
 
