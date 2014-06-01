@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import loader, RequestContext
 
-from registration.forms import CustomerRegistration
+from registration.forms import CustomerRegistration, SellerRegistration
 
 
 def index(request):
@@ -13,9 +13,7 @@ def index(request):
 def artlover_form(request):
     if request.method == 'POST':
         user_form = CustomerRegistration(data=request.POST)
-        print user_form.errors
         if user_form.is_valid():
-            user_form.cleaned_data['type'] = 'artistlover'
             user = user_form.save()
             user.type = 'customer'
             user.set_password(user.password)
@@ -29,3 +27,20 @@ def artlover_form(request):
                 'registration/register.html',
                 {'user_form': user_form}
             )
+
+def seller_form(request):
+    if request.method == 'POST':
+        user_form = SellerRegistration(data=request.POST)
+        if user_form.is_valid():
+            user = user_form.save()
+            user.type = 'seller'
+            user.set_password(user.password)
+            user.save()
+
+        return HttpResponse('Account created successfully')
+    else:
+        user_form = CustomerRegistration()
+        template = loader.get_template('registration/buyer_form.html')
+        context = RequestContext(request, {'user_form': user_form})
+        return HttpResponse(template.render(context))
+
