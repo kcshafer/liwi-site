@@ -23,6 +23,7 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user is not None and user.is_active:
             auth.login(request, user)
+            request.session['user_id'] = user.id
             return HttpResponseRedirect('/')
         else:
             return HttpResponse('User not found or password incorrect')
