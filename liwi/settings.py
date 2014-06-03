@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -85,4 +86,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
+
+AUTH_USER_MODEL = 'registration.User'
+
+LOGIN_URL = '/auth'
