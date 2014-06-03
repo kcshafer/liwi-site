@@ -13,4 +13,7 @@ urlpatterns = patterns('',
     url(r'^$', 'home.views.index', name='index'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^registration/', include('registration.urls')),
+    url(r'^auth/', include('authentication.urls')),
+    url(r'^profile/', include('user_profile.urls')),
+
 )

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+    </head>
+
+    <body>
+
+        <form id="user_form" method="post" action="/auth/login/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ login_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Login" />
+        </form>
+    </body>
+</html>
