@@ -7,7 +7,6 @@ from django.template import loader, RequestContext
 from authentication.forms import LoginForm
 
 def index(request):
-    print request.session
     login_form = LoginForm()
     return render(
         request,
@@ -28,6 +27,7 @@ def login(request):
         else:
             return HttpResponse('User not found or password incorrect')
     else:
+        #this might need to return something more ui friendly
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
 
 def logout(request):

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Profile</title>
+    </head>
+
+    <body>
+
+        <form id="profile_form" method="post" action="/profile/saveprofile/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Save" />
+        </form>
+    </body>
+</html>
