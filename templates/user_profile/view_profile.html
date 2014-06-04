@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Register</title>
+        <title>Profile - {{ user.username }}</title>
+        {% include header.html %}
     </head>
+    <body>
+        {% include 'home/navigation.html' %}
+        
+        {{ user.first_name }}
+        {{ user.last_name }}
         {{ user.email }}
+        {{ profile.bio }}
+        {{ profile.twitter }}
     </body>
 </html>
