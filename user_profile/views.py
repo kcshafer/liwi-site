@@ -11,8 +11,9 @@ from user_profile.models import Profile
 def view_profile(request, user_id):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
+    profile = Profile.objects.get(user_id=user_id)
     template = loader.get_template('user_profile/view_profile.html')
-    context = RequestContext(request, {'user': user})
+    context = RequestContext(request, {'user': user, 'profile': profile})
 
     return HttpResponse(template.render(context))
 
