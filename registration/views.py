@@ -16,6 +16,7 @@ def artlover_form(request):
         if user_form.is_valid():
             user = user_form.save()
             user.type = 'customer'
+            user.is_artist = False
             user.set_password(user.password)
             user.save()
 
@@ -33,6 +34,7 @@ def seller_form(request):
         user_form = SellerRegistration(data=request.POST)
         if user_form.is_valid():
             user = user_form.save()
+            user.is_artist = True
             user.type = 'seller'
             user.set_password(user.password)
             user.save()

@@ -2,11 +2,11 @@
 <html>
     <head>
         <title>Profile - {{ user.username }}</title>
-        {% include header.html %}
+        {% include 'home/header.html' %}
     </head>
     <body>
         {% include 'home/navigation.html' %}
-        
+
         {{ user.first_name }}
         {{ user.last_name }}
         {{ user.email }}
