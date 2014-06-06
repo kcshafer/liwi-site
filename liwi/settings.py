@@ -39,7 +39,8 @@ INSTALLED_APPS = (
     'registration',
     'authentication',
     'home',
-    'user_profile'
+    'user_profile',
+    'art',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,3 +99,6 @@ TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/auth'
+
+MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos'
+MEDIA_URL = '/photos/'

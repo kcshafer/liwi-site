@@ -26,6 +26,7 @@ def edit_profile(request):
     context = RequestContext(request, {'profile_form': profile_form})
     return HttpResponse(template.render(context))
 
+@login_required
 def save_profile(request):
     if request.method == 'POST':
         user_id = request.session['user_id']

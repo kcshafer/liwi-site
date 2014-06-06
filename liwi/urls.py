@@ -15,5 +15,5 @@ urlpatterns = patterns('',
     url(r'^registration/', include('registration.urls')),
     url(r'^auth/', include('authentication.urls')),
     url(r'^profile/', include('user_profile.urls')),
-
+    url(r'^art/', include('art.urls')),
 )
