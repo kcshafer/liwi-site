@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>New Art</title>
+        {% include 'home/header.html' %}
+    </head>
+
+    <body>
+
+        {% include 'home/navigation.html' %}
+
+        <form id="user_form" method="post" action="/art/upload/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ art_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Register" />
+        </form>
+    </body>
+</html>
