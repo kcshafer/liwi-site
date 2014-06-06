@@ -100,5 +100,5 @@ AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/auth'
 
-MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos'
+MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
 MEDIA_URL = '/photos/'

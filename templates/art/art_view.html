@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Profile - {{ user.username }}</title>
+        {% include 'home/header.html' %}
+    </head>
+    <body>
+        {% include 'home/navigation.html' %}
+
+        <img src="{{ art.photo.url }}"/>
+        {{ art.title }}
+        {{ art.description }}
+    </body>
+</html>

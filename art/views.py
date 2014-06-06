@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
+from art.models import Art
 from registration.models import User
 
 def index(request):
@@ -36,3 +37,10 @@ def upload(request):
             return HttpResponse(art_form.errors)
     else:
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
+
+def view_art_single(request, art_id):
+    art = Art.objects.get(id=art_id)
+    template = loader.get_template('art/art_view.html')
+    context = RequestContext(request, {'art': art})
+
+    return HttpResponse(template.render(context))

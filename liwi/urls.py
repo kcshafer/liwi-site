@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from django.conf import settings
 
 import home
 
@@ -16,4 +17,11 @@ urlpatterns = patterns('',
     url(r'^auth/', include('authentication.urls')),
     url(r'^profile/', include('user_profile.urls')),
     url(r'^art/', include('art.urls')),
+)
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        url(r'^photos/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+        }),
 )
