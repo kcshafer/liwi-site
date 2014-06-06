@@ -8,8 +8,13 @@ from art.forms import ArtForm
 from art.models import Art
 from registration.models import User
 
+#index is multi view
 def index(request):
-    return HttpResponse('Art index')
+    art = Art.objects.all()[:10]
+    template = loader.get_template('art/art_multi_view.html')
+    context = RequestContext(request, {'art' : art})
+
+    return HttpResponse(template.render(context))
 
 @login_required
 def create_art_form(request):
