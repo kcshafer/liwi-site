@@ -2,14 +2,14 @@
 <html>
     <head>
         <title>Register</title>
-        { % include 'home/header.html' %}
+        {% include 'home/header.html' %}
     </head>
 
     <body>
 
         {% include 'home/navigation.html' %}
 
-        <form id="user_form" method="post" action="/registration/artist/"
+        <form id="user_form" method="post" action="/registration/artistlover/"
                 enctype="multipart/form-data">
 
             {% csrf_token %}

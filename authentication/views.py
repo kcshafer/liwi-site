@@ -13,7 +13,6 @@ def index(request):
         'authentication/login_form.html',
         {'login_form': login_form}
     )
-    return HttpResponse('This is the auth index')
 
 def login(request):
     if request.method == 'POST':

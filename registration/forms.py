@@ -5,6 +5,8 @@ from registration.models import User
 class CustomerRegistration(forms.ModelForm):
 
     password = forms.CharField(widget=forms.PasswordInput())
+    #TODO: not sure if having a hidden field is the ideal way to do this
+    is_artist = forms.BooleanField(initial=False, required=False, widget=forms.HiddenInput)
 
     class Meta:
         model = User
@@ -13,6 +15,7 @@ class CustomerRegistration(forms.ModelForm):
 class SellerRegistration(forms.ModelForm):
 
     password = forms.CharField(widget=forms.PasswordInput())
+    is_artist = forms.BooleanField(initial=True, required=False, widget=forms.HiddenInput)
 
     class Meta:
         model = User
