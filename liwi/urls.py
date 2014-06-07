@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^auth/', include('authentication.urls')),
     url(r'^profile/', include('user_profile.urls')),
     url(r'^art/', include('art.urls')),
+    url(r'^artists/', include('artists.urls')),
 )
 
 if settings.DEBUG:

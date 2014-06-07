@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LiWi Artists</title>
+        {% include 'home/header.html' %}
+    </head>
+    <body>
+        {% include 'home/navigation.html' %}
+        <table>
+            {% for a in artists %}
+            <td>
+                <tr>
+                    <a href="/profile/view/{{ a.id }}">{{ a.username }}</a>
+                </tr>
+
+                {% if forloop.lastrow %}
+                    </td>
+                {% else %}
+
+                    {% if forloop.counter|divisibleby:"3" %}
+                        </td>
+                        <td>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </table>
+    </body>
+</html>
