@@ -19,17 +19,16 @@ def artlover_form(request):
             user = user_form.save(commit=False)
             user.type = 'customer'
             user.is_artist = False
+            user.is_active = False
             user.set_password(user.password)
             user.save()
+        print user_form.errors
         return HttpResponse('Account created successfully')
     else:
-        #TODO: use template.render for form
-        user_form = CustomerRegistration(initial={'is_artist':False})
-        return render(
-            request,
-                'registration/buyer_form.html',
-                {'user_form': user_form}
-            )
+        user_form = SellerRegistration(initial={'is_artist':False})
+        template = loader.get_template('registration/buyer_form.html')
+        context = RequestContext(request, {'user_form': user_form})
+        return HttpResponse(template.render(context))        
 
 def seller_form(request):
     if request.method == 'POST':
