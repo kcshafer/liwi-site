@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
 )
 
 ROOT_URLCONF = 'liwi.urls'
@@ -103,3 +104,9 @@ LOGIN_URL = '/auth'
 
 MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
 MEDIA_URL = '/photos/'
+
+EMAIL_HOST = 'mailtrap.io'
+EMAIL_HOST_USER = '21083908bd7b8551c'
+EMAIL_HOST_PASSWORD = 'f0bc9572503d2b'
+EMAIL_PORT = '2525'
+EMAIL_USE_TLS = True
