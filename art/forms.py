@@ -1,7 +1,6 @@
 from django import forms
 
 from art.models import Art
-from registration.models import User
 
 class ArtForm(forms.ModelForm):
     

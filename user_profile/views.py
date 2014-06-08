@@ -30,10 +30,11 @@ def save_profile(request):
     if request.method == 'POST':
         user_id = request.session['user_id']
         profile = Profile.objects.get(user_id=user_id)
-        profile_form = MyProfileForm(request.POST, instance=profile)
+        profile_form = MyProfileForm(request.POST, request.FILES, instance=profile)
         if profile_form.is_valid():
             profile = profile_form.save()
             profile.save()
+        print profile_form.errors
         return HttpResponseRedirect('/profile/view/%s' % (user_id))
     else:
         #this might need to return something more ui friendly
