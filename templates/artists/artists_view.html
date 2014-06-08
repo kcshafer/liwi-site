@@ -10,6 +10,8 @@
             {% for a in artists %}
             <td>
                 <tr>
+                    <img src="{{ MEDIA_URL }}{{ a.photo }}" height="200"/>
+                    <br/>
                     <a href="/profile/view/{{ a.id }}">{{ a.username }}</a>
                 </tr>
 
