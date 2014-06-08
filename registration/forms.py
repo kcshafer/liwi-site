@@ -1,5 +1,7 @@
 from django import forms
-from registration.models import User
+
+from registration.fields import QuestionModelChoiceField
+from registration.models import User, SecurityQuestion
 
 
 class CustomerRegistration(forms.ModelForm):
@@ -16,7 +18,15 @@ class SellerRegistration(forms.ModelForm):
 
     password = forms.CharField(widget=forms.PasswordInput())
     is_artist = forms.BooleanField(initial=True, required=False, widget=forms.HiddenInput)
+    secret_question = QuestionModelChoiceField(queryset=SecurityQuestion.objects.all().values('question', 'id'))
+    secret_answer = forms.CharField()
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
+
+    #TODO: there could be a better way of doing this
+    def clean(self):
+        super(SellerRegistration, self).clean() #if necessary
+        del self._errors['secret_question']
+        return self.cleaned_data     

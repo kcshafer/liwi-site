@@ -1,3 +1,5 @@
+import ast
+
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,7 +7,7 @@ from django.shortcuts import render
 from django.template import loader, RequestContext
 
 from registration.forms import CustomerRegistration, SellerRegistration
-from registration.models import User
+from registration.models import User, SecurityAnswer
 
 def index(request):
     template = loader.get_template('registration/index.html')
@@ -40,6 +42,12 @@ def seller_form(request):
             user.type = 'seller'
             user.set_password(user.password)
             user.save()
+            secret_question = ast.literal_eval(user_form['secret_question'].value())
+            secret_answer_val = user_form['secret_answer'].value()
+            secret_answer = SecurityAnswer()
+            secret_answer.user_id = user.id
+            secret_answer.security_questions_id = secret_question.get('id')
+            secret_answer.answer = secret_answer_val
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'noreply@liwi.co', [user.email])
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
