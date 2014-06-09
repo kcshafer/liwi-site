@@ -11,11 +11,10 @@ from registration.models import User, SecurityAnswer, SecurityQuestion
 
 def index(request):
     login_form = LoginForm()
-    return render(
-        request,
-        'authentication/login_form.html',
-        {'login_form': login_form}
-    )
+    template = loader.get_template('authentication/login_form.html')
+    context = RequestContext(request, {'login_form': login_form})
+
+    return HttpResponse(template.render(context))
 
 def login(request):
     if request.method == 'POST':
