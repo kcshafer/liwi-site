@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Reset Password</title>
+        {% include 'home/header.html' %}
+    </head>
+
+    <body>
+    {% include 'home/navigation.html' %}
+        <form id="user_form" method="post" action="/resetpassword/valid"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ secret_question.question }}
+            <input type="text" id="secret_answer" name="secret_answer"/>
+            <input type="submit" name="submit" value="Submit" />
+
+        </form>
+    </body>
+</html>

@@ -1,10 +1,13 @@
-from django.contrib import auth
+from django.contrib import auth, messages
+from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from authentication.forms import LoginForm
+from registration.models import User, SecurityAnswer, SecurityQuestion
 
 def index(request):
     login_form = LoginForm()
@@ -15,6 +18,7 @@ def index(request):
     )
 
 def login(request):
+    print "doing it"
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -32,3 +36,74 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect('/auth')
+
+def forgot_password(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        if User.objects.filter(username=username).count():
+            user = User.objects.get(username=username)
+            cache.set('user_id', user.id, 30)
+            return HttpResponseRedirect('/resetpassword/valid')
+        else:
+            messages.add_message(request, messages.ERROR, 'Username does not exist, please try again.')
+            return HttpResponseRedirect('forgotpassword/') 
+    else:
+        template = loader.get_template('authentication/forgot_password.html')
+        context = RequestContext(request)
+        return HttpResponse(template.render(context))
+
+def validate_answer(request):
+    if request.method == 'POST':
+        user_id = cache.get('user_id')
+        if user_id:
+            answer = request.POST.get('secret_answer')
+            secret_answer = SecurityAnswer.objects.get(user_id=user_id)
+            if secret_answer.answer == answer:
+                return HttpResponseRedirect('resetpassword/')
+            else:
+                messages.add_message(request, messages.ERROR, 'Incorrect answer')
+                return HttpResponseRedirect('valid')
+        else:
+            messages.add_message(request, messages.ERROR, 'Request timed out, please try again.')
+            return HttpResponseRedirect('forgotpassword/')
+    else:
+        user_id = cache.get('user_id')
+        if user_id:
+            secret_answer = SecurityAnswer.objects.get(user_id=user_id)
+            secret_question = SecurityQuestion.objects.get(id=secret_answer.security_questions_id)
+            context = RequestContext(request, {'secret_question': secret_question})
+            template = loader.get_template('authentication/security_questions.html')
+            cache.set('user_id', user_id, 30)
+            return HttpResponse(template.render(context))
+        else:
+            messages.add_message(request, messages.ERROR, 'Request timed out, please try again.')
+            return HttpResponseRedirect('forgotpassword/')
+
+def reset_password(request):
+    if request.method == 'POST':
+        user_id = cache.get('user_id')
+        if user_id:
+            password = request.POST.get('password')
+            re_password = request.POST.get('re_password')
+            if password == re_password:
+                secure_pw = make_password(password)
+                print secure_pw
+                password = None
+                re_password = None
+                user = User.objects.get(id=user_id)
+                user.password = secure_pw
+                user.save()
+                return HttpResponseRedirect('/login')
+            else:
+                messages.add_message(request, messages.ERROR, 'Passwords did not match try again')
+                cache.set('user_id', user_id, 30)
+                return HttpResponse('/resetpassword')
+        else:
+            messages.add_message(request, messages.ERROR, 'Request timed out, please try again.')
+            return HttpResponseRedirect('forgotpassword/')
+    else:
+        user_id = cache.get('user_id')
+        context = RequestContext(request)
+        template = loader.get_template('authentication/reset_password.html')
+        cache.set('user_id', user_id, 30)
+        return HttpResponse(template.render(context))

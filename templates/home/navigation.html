@@ -18,9 +18,6 @@
         <li><a href="/artists">Discover Artists</a></li>
         <li><a href="/art/">Discover Art</a></li>
         <li><a href="">Contact Us</a></li>
-        {% if not user.is_authenticated %}
-          <li><a href="/registration/">Sign Up</a></li>
-        {% endif %}
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
@@ -28,17 +25,18 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      {% if not user.is_authenticated %}
-        <li><a href="/registration/">Sign Up</a></li>
-      {% else %}
-        <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right">
+        {% if not user.is_authenticated %}
+          <li><a href="/login/">Sign In</a></li>
+          <li><a href="/registration/">Sign Up</a></li>
+        {% else %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }}<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="/profile/view/{{ user.id }}">My Profile</a></li>
               <li><a href="/profile/myprofile/edit">Edit Profile</a></li>
               <li class="divider"></li>
-              <li><a href="/auth/logout">Logout</a></li>
+              <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
         </ul>
