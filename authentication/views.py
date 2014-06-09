@@ -18,7 +18,6 @@ def index(request):
     )
 
 def login(request):
-    print "doing it"
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
