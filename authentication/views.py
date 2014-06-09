@@ -87,7 +87,6 @@ def reset_password(request):
             re_password = request.POST.get('re_password')
             if password == re_password:
                 secure_pw = make_password(password)
-                print secure_pw
                 password = None
                 re_password = None
                 user = User.objects.get(id=user_id)
