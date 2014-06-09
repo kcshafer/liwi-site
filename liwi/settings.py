@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -21,6 +22,8 @@ SECRET_KEY = '69)jz9t9^kvci2_8^j732h%a*8yz4h-(kehld1@e2jcw_d9wkn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+TESTING = 'test' in sys.argv
 
 TEMPLATE_DEBUG = True
 
@@ -70,6 +73,14 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+    },
+    'liwi_test': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'liwi',
+        'USER': 'kshafer',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -105,8 +116,14 @@ LOGIN_URL = '/auth'
 MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
 MEDIA_URL = '/photos/'
 
-EMAIL_HOST = 'mailtrap.io'
-EMAIL_HOST_USER = '21083908bd7b8551c'
-EMAIL_HOST_PASSWORD = 'f0bc9572503d2b'
-EMAIL_PORT = '2525'
-EMAIL_USE_TLS = True
+#if testing, send messages with a file based backend
+#NOTE: the run_tests script will create and tear down the mail directory
+if TESTING:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = 'mail/' 
+else:
+    EMAIL_HOST = 'mailtrap.io'
+    EMAIL_HOST_USER = '21083908bd7b8551c'
+    EMAIL_HOST_PASSWORD = 'f0bc9572503d2b'
+    EMAIL_PORT = '2525'
+    EMAIL_USE_TLS = True

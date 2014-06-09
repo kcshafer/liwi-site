@@ -1,5 +1,6 @@
 import ast
 
+from django.core.mail  import get_connection
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect
@@ -24,7 +25,6 @@ def artlover_form(request):
             user.is_active = False
             user.set_password(user.password)
             user.save()
-        print user_form.errors
         return HttpResponse('Account created successfully')
     else:
         user_form = SellerRegistration(initial={'is_artist':False})
@@ -42,12 +42,18 @@ def seller_form(request):
             user.type = 'seller'
             user.set_password(user.password)
             user.save()
-            secret_question = ast.literal_eval(user_form['secret_question'].value())
-            secret_answer_val = user_form['secret_answer'].value()
-            secret_answer = SecurityAnswer()
-            secret_answer.user_id = user.id
-            secret_answer.security_questions_id = secret_question.get('id')
-            secret_answer.answer = secret_answer_val
+            #TODO: find a way to properly handle this
+            #catching when there isn't a secret answer 
+            try:
+                secret_question = ast.literal_eval(user_form['secret_question'].value())
+                secret_answer_val = user_form['secret_answer'].value()
+                secret_answer = SecurityAnswer()
+                secret_answer.user_id = user.id
+                secret_answer.security_questions_id = secret_question.get('id')
+                secret_answer.answer = secret_answer_val
+            except:
+                #TODO: ponder what to do with this
+                pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'noreply@liwi.co', [user.email])
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
@@ -68,5 +74,5 @@ def activate_user(request, user_id):
     else:
         messages.add_message(request, messages.ERROR, 'Invalid request. User is already activated.')
 
-    return HttpResponseRedirect('/auth/')
+    return HttpResponseRedirect('/login/')
 
