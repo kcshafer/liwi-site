@@ -5,6 +5,7 @@ from django.test import TestCase
 from registration.forms import CustomerRegistration
 from registration.models import User
 from registration.views import index, artlover_form, seller_form, activate_user
+from user_profile.models import Profile
 
 class RegistrationTest(TestCase):
 
@@ -101,7 +102,9 @@ class RegistrationTest(TestCase):
         response = c.post(('/registration/activate/%s/' %  new_user.id))
 
         active_user = User.objects.get(username='artist_activate_test')
+        user_profile = Profile.objects.get(user_id=active_user.id)
 
+        self.assertIsNotNone(user_profile)
         self.assertTrue(active_user.is_active)
         self.assertRedirects(response, '/login/')
 

@@ -9,6 +9,7 @@ from django.template import loader, RequestContext
 
 from registration.forms import CustomerRegistration, SellerRegistration
 from registration.models import User, SecurityAnswer
+from user_profile.models import Profile 
 
 def index(request):
     template = loader.get_template('registration/index.html')
@@ -59,6 +60,7 @@ def seller_form(request):
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
+        print user_form.errors
         return HttpResponse('Account created successfully')
     else:
         user_form = SellerRegistration(initial={'is_artist':True})
@@ -70,6 +72,7 @@ def activate_user(request, user_id):
     user = User.objects.get(id=user_id)
     if not user.is_active:
         user.is_active = True
+        Profile.objects.create(user_id=user_id)
         user.save()
     else:
         messages.add_message(request, messages.ERROR, 'Invalid request. User is already activated.')
