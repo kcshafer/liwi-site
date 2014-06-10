@@ -24,3 +24,12 @@ class SellerRegistration(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
+
+    def clean(self):
+            super(SellerRegistration, self).clean() #if necessary
+            try:
+                del self._errors['secret_question']
+            except:
+                pass
+                
+            return self.cleaned_data     
