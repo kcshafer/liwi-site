@@ -33,7 +33,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect('/auth')
+    return HttpResponseRedirect('/login')
 
 def forgot_password(request):
     if request.method == 'POST':
