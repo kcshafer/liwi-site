@@ -6,8 +6,9 @@
     </head>
     <body>
         {% include 'home/navigation.html' %}
-
-        <img src="{{ profile.photo.url }}"/>
+        {% if profile.photo %}
+            <img src="{{ profile.photo.url }}"/>
+        {% endif %}
         {{ user.first_name }}
         {{ user.last_name }}
         {{ user.email }}
