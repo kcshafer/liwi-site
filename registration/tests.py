@@ -1,3 +1,5 @@
+import os
+
 from django.core.urlresolvers import resolve
 from django.test.client import Client 
 from django.test import TestCase
@@ -107,4 +109,5 @@ class RegistrationTest(TestCase):
         self.assertIsNotNone(user_profile)
         self.assertTrue(active_user.is_active)
         self.assertRedirects(response, '/login/')
+        self.assertTrue(os.path.isdir('test_photos/user/%s' % new_user.id))
 

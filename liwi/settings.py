@@ -113,8 +113,12 @@ AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/login'
 
-MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
-MEDIA_URL = '/photos/'
+if TESTING:
+    MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/test_photos/'
+    MEDIA_URL = '/test_photos/'
+else:
+    MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
+    MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
 #NOTE: the run_tests script will create and tear down the mail directory

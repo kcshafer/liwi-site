@@ -1,4 +1,5 @@
 import ast
+from os import mkdir 
 
 from django.core.mail  import get_connection
 from django.contrib import messages
@@ -9,7 +10,8 @@ from django.template import loader, RequestContext
 
 from registration.forms import CustomerRegistration, SellerRegistration
 from registration.models import User, SecurityAnswer
-from user_profile.models import Profile 
+from user_profile.models import Profile
+from liwi import settings
 
 def index(request):
     template = loader.get_template('registration/index.html')
@@ -73,6 +75,7 @@ def activate_user(request, user_id):
     if not user.is_active:
         user.is_active = True
         Profile.objects.create(user_id=user_id)
+        mkdir('%s/user/%s' % (settings.MEDIA_ROOT,user_id))
         user.save()
     else:
         messages.add_message(request, messages.ERROR, 'Invalid request. User is already activated.')
