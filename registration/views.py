@@ -28,7 +28,25 @@ def artlover_form(request):
             user.is_active = False
             user.set_password(user.password)
             user.save()
-        return HttpResponse('Account created successfully')
+            #TODO: find a way to properly handle this
+            #catching when there isn't a secret answer 
+            try:
+                secret_question = ast.literal_eval(user_form['secret_question'].value())
+                secret_answer_val = user_form['secret_answer'].value()
+                secret_answer = SecurityAnswer()
+                secret_answer.user_id = user.id
+                secret_answer.security_questions_id = secret_question.get('id')
+                secret_answer.answer = secret_answer_val
+            except:
+                #TODO: ponder what to do with this
+                pass
+            email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
+            msg = EmailMultiAlternatives('Activate User', email_message , 'noreply@liwi.co', [user.email])
+            html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
+            msg.attach_alternative(html_email, "text/html")
+            resp = msg.send()
+        messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
+        return HttpResponseRedirect('/login/')
     else:
         user_form = SellerRegistration(initial={'is_artist':False})
         template = loader.get_template('registration/buyer_form.html')
@@ -62,8 +80,8 @@ def seller_form(request):
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
-        print user_form.errors
-        return HttpResponse('Account created successfully')
+        messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
+        return HttpResponseRedirect('/login/')
     else:
         user_form = SellerRegistration(initial={'is_artist':True})
         template = loader.get_template('registration/register.html')
@@ -75,7 +93,7 @@ def activate_user(request, user_id):
     if not user.is_active:
         user.is_active = True
         Profile.objects.create(user_id=user_id)
-        mkdir('%s/user/%s' % (settings.MEDIA_ROOT,user_id))
+        mkdir('%suser/%s' % (settings.MEDIA_ROOT,user_id))
         user.save()
     else:
         messages.add_message(request, messages.ERROR, 'Invalid request. User is already activated.')
