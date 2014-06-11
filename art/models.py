@@ -11,3 +11,11 @@ class Art(models.Model):
 
     class Meta:
         db_table = 'art'
+
+class Like(models.Model):
+    user = models.ForeignKey('registration.User')
+    art = models.ForeignKey('art.Art')
+    art_user_like = models.CharField(max_length=80)
+    
+    class Meta:
+        db_table = 'art_like'

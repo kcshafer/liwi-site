@@ -5,14 +5,24 @@ from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
-from art.models import Art
+from art.models import Art, Like
 from registration.models import User
 
 #index is multi view
 def index(request):
-    art = Art.objects.all()[:10]
     template = loader.get_template('art/art_multi_view.html')
-    context = RequestContext(request, {'art' : art})
+    if request.user.is_authenticated():
+        user_id = request.session['user_id']
+        #TODO: optimize this
+        liked_art = Like.objects.all().filter(user_id=user_id)
+        liked_art_ids = []
+        for la in liked_art:
+            liked_art_ids.append(la.art_id)
+        art = Art.objects.all()
+        context = RequestContext(request, {'art' : art, 'liked_art': liked_art_ids})
+    else:
+        art = Art.objects.all()
+        context = RequestContext(request, {'art' : art})
 
     return HttpResponse(template.render(context))
 
@@ -38,7 +48,6 @@ def upload(request):
             art.save()
             return HttpResponse('Art created')
         else:
-            print art_form.errors
             return HttpResponse(art_form.errors)
     else:
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
@@ -49,3 +58,12 @@ def view_art_single(request, art_id):
     context = RequestContext(request, {'art': art})
 
     return HttpResponse(template.render(context))
+
+@login_required
+def like_art(request, art_id):
+    user_id = request.session['user_id']
+    art_user_like = "%s_%s" % (user_id, art_id)
+    Like.objects.create(user_id=user_id, art_id=art_id, art_user_like=art_user_like)
+
+    return HttpResponse('Liked!')
+
