@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllow
 from django.shortcuts import render
 from django.template import loader, RequestContext
 
+from art.models import Art
 from registration.models import User
 from user_profile.forms import MyProfileForm
 from user_profile.models import Profile
@@ -11,8 +12,9 @@ from user_profile.models import Profile
 def view_profile(request, user_id):
     user = User.objects.get(id=user_id)
     profile = Profile.objects.get(user_id=user_id)
+    art = Art.objects.all().filter(user_id=user_id)
     template = loader.get_template('user_profile/view_profile.html')
-    context = RequestContext(request, {'user': user, 'profile': profile})
+    context = RequestContext(request, {'user': user, 'profile': profile, 'art': art})
 
     return HttpResponse(template.render(context))
 

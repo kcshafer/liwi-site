@@ -14,5 +14,13 @@
         {{ user.email }}
         {{ profile.bio }}
         {{ profile.twitter }}
+        {% if user.is_artist %}
+            <h1>{{user.username}}'s Gallery</h1>
+            {% for a in art %}
+                <img src="{{ a.photo.url }}" height="200" />
+                {{ a.title }}
+                {{ a.description }}
+            {% endfor %}
+        {% endif %}
     </body>
 </html>
