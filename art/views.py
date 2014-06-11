@@ -48,6 +48,7 @@ def upload(request):
             art.save()
             return HttpResponse('Art created')
         else:
+            print art_form.errors
             return HttpResponse(art_form.errors)
     else:
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')

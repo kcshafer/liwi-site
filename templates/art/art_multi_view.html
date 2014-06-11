@@ -3,31 +3,105 @@
     <head>
         <title>LiWi Art</title>
         {% include 'home/header.html' %}
+        {% load staticfiles %}
+        <script src="{% static "js/freewall.js" %}"></script>
+        <style type="text/css">
+            body {
+                background: rgba(231, 231, 231, 0.43);
+            }
+            .free-wall {
+                margin: 15px;
+            }
+            .brick {
+                width: 221.2px;
+            }
+            .info {
+                padding: 15px;
+                color: #333;
+            }
+            .brick img {
+                margin: 0px;
+                padding: 0px;
+                display: block;
+            }
+            body {
+            background: #e8e8e8;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+        }
+
+        .brick {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+            border-radius: 3px;
+            color: #333;
+            border: none;
+        }
+
+
+        .brick .img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        .brick h3, .brick h5 {
+            text-shadow: none;
+        }
+
+        .art_title {
+            /*margin-bottom: 5px !important;*/
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        </style>
     </head>
     <body>
         {% include 'home/navigation.html' %}
         {% csrf_token %}
+        <div id="freewall" class="free-wall">
         {% for a in art %}
-            <img src="{{ a.photo.url }}" height="200" />
-            {{ a.title }}
-            {{ a.description }}
-            {% if user.is_authenticated %}
-                <button type="button" id="{{ a.id }}" class="btn btn-default btn-lg like_btn">
-                {% if a.id not in liked_art%}
-                    <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"></span> Like
+            <div class="brick">
+                <a href="/art/view/{{ a.id }}"><img src="{{ a.photo.url }}" width="100%" /></a>
+                <div class="info">
+                    <div class="art_title">{{ a.title }}</div>
+                    <br/>
+                {% if user.is_authenticated %}
+                    <button type="button" id="{{ a.id }}" class="btn btn-default btn-md like_btn">
+                    {% if a.id not in liked_art%}
+                        <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"> Like</span>
+                    {% else %}
+                      <span class="glyphicon glyphicon-heart"></span> Liked
+                    {% endif %}
+                    </button>
                 {% else %}
-                  <span class="glyphicon glyphicon-heart"></span> Liked
+                    <button type="button" id="{{ a.id }}" class="btn btn-default btn-lg like_btn_login">
+                        <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"></span> Like
+                    </button>
                 {% endif %}
-                </button>
-            {% else %}
-                <button type="button" id="{{ a.id }}" class="btn btn-default btn-lg like_btn_login">
-                    <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"></span> Like
-                </button>
-            {% endif %}
+            </div>
+            </div>
         {% endfor %}
         <script>
+        var wall = new freewall("#freewall");
+            wall.reset({
+                selector: '.brick',
+                animate: true,
+                cellW: 200,
+                cellH: 'auto',
+                onResize: function() {
+                    wall.fitWidth();
+                }
+            });
+            
+            wall.container.find('.brick img').load(function() {
+                wall.fitWidth();
+            });
             $(".like_btn").click(function(){
                     $("#heart-" + this.id).attr('class', 'glyphicon glyphicon-heart');
+                    $("#heart-" + this.id).text(" Liked");
                    $.ajax({
                         type:"POST",
                         beforeSend: function (xhr, settings)
