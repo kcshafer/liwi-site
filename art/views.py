@@ -46,7 +46,7 @@ def upload(request):
             art = art_form.save(commit=False)
             art.user_id = user_id
             art.save()
-            return HttpResponse('Art created')
+            return HttpResponseRedirect('/art/view/%s' % (art.id))
         else:
             print art_form.errors
             return HttpResponse(art_form.errors)
