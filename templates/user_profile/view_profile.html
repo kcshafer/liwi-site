@@ -3,24 +3,129 @@
     <head>
         <title>Profile - {{ user.username }}</title>
         {% include 'home/header.html' %}
+        {% load staticfiles %}
+        <script src="{% static "js/freewall.js" %}"></script>
+        <style type="text/css">
+            body {
+                background: rgba(231, 231, 231, 0.43);
+            }
+            .free-wall {
+                margin: 15px;
+            }
+            .brick {
+                width: 221.2px;
+            }
+            .info {
+                padding: 15px;
+                color: #333;
+            }
+            .brick img {
+                margin: 0px;
+                padding: 0px;
+                display: block;
+            }
+            body {
+            background: #e8e8e8;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+        }
+
+        .brick {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+            border-radius: 3px;
+            color: #333;
+            border: none;
+        }
+
+
+        .brick .img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        .brick h3, .brick h5 {
+            text-shadow: none;
+        }
+
+        .art_title {
+            /*margin-bottom: 5px !important;*/
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        </style>
     </head>
     <body>
         {% include 'home/navigation.html' %}
-        {% if profile.photo %}
-            <img src="{{ profile.photo.url }}"/>
+        <table>
+            <tr>
+                <td>
+                    {% if profile.photo %}
+                        <img style="margin-bottom: 25px;" src="{{ profile.photo.url }}" height="400"/>
+                    {% endif %}
+                </td>
+                <td>
+                    <h3>{{ usr.username }}</h3>
+                    {{ profile.bio }}
+                    {{ profile.twitter }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h4>About Me</h4>
+                    <p>{{ profile.bio }}</p>
+                </td>
+            </tr>
+        </table>
+        {% if usr.is_artist %}
+            <h1>{{ usr.username }}'s Gallery</h1>
+                <div id="freewall" class="free-wall">
+                    {% for a in art %}
+                        <div class="brick">
+                            <a href="/art/view/{{ a.id }}"><img src="{{ MEDIA_URL }}{{ a.photo }}" width="100%"/></a>
+                            <div class="info">
+                                <div class="art_title">{{ a.title }}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
         {% endif %}
-        {{ user.first_name }}
-        {{ user.last_name }}
-        {{ user.email }}
-        {{ profile.bio }}
-        {{ profile.twitter }}
-        {% if user.is_artist %}
-            <h1>{{user.username}}'s Gallery</h1>
-            {% for a in art %}
-                <img src="{{ a.photo.url }}" height="200" />
-                {{ a.title }}
-                {{ a.description }}
-            {% endfor %}
-        {% endif %}
+        <script>
+            var wall = new freewall("#freewall");
+            wall.reset({
+                selector: '.brick',
+                animate: true,
+                cellW: 200,
+                cellH: 'auto',
+                onResize: function() {
+                    wall.fitWidth();
+                }
+            });
+            
+            wall.container.find('.brick img').load(function() {
+                wall.fitWidth();
+            });
+            $(".like_btn").click(function(){
+                    $("#heart-" + this.id).attr('class', 'glyphicon glyphicon-heart');
+                    $("#heart-" + this.id).text(" Liked");
+                   $.ajax({
+                        type:"POST",
+                        beforeSend: function (xhr, settings)
+                        {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                        },
+                        url: "/art/like/" + this.id + '/',
+                        success: function() {
+                        }
+                })
+            });
+
+            $(".like_btn_login").click(function(){
+                window.location.replace('/login/')
+            });
+        </script>
     </body>
 </html>

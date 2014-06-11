@@ -6,25 +6,86 @@
     </head>
     <body>
         {% include 'home/navigation.html' %}
-        <table>
+        {% load staticfiles %}
+        <script src="{% static "js/freewall.js" %}"></script>
+        <style type="text/css">
+            body {
+                background: rgba(231, 231, 231, 0.43);
+            }
+            .free-wall {
+                margin: 15px;
+            }
+            .brick {
+                width: 221.2px;
+            }
+            .info {
+                padding: 15px;
+                color: #333;
+            }
+            .brick img {
+                margin: 0px;
+                padding: 0px;
+                display: block;
+            }
+            body {
+            background: #e8e8e8;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+        }
+
+        .brick {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+            border-radius: 3px;
+            color: #333;
+            border: none;
+        }
+
+
+        .brick .img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        .brick h3, .brick h5 {
+            text-shadow: none;
+        }
+
+        .username {
+            /*margin-bottom: 5px !important;*/
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        </style>
+        <div id="freewall" class="free-wall">
             {% for a in artists %}
-            <td>
-                <tr>
-                    <img src="{{ MEDIA_URL }}{{ a.photo }}" height="200"/>
-                    <br/>
-                    <a href="/profile/view/{{ a.id }}">{{ a.username }}</a>
-                </tr>
-
-                {% if forloop.lastrow %}
-                    </td>
-                {% else %}
-
-                    {% if forloop.counter|divisibleby:"3" %}
-                        </td>
-                        <td>
-                    {% endif %}
-                {% endif %}
+                <div class="brick">
+                    <a href="/profile/view/{{ a.id }}"><img src="{{ MEDIA_URL }}{{ a.photo }}" width="100%"/></a>
+                    <div class="info">
+                        <div class="username">{{ a.username }}</div>
+                    </div>
+                </div>
             {% endfor %}
-        </table>
+        </div>
+
+        <script>
+        var wall = new freewall("#freewall");
+            wall.reset({
+                selector: '.brick',
+                animate: true,
+                cellW: 200,
+                cellH: 'auto',
+                onResize: function() {
+                    wall.fitWidth();
+                }
+            });
+            
+            wall.container.find('.brick img').load(function() {
+                wall.fitWidth();
+            });
+        </script>
     </body>
 </html>

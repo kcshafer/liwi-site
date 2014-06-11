@@ -14,7 +14,7 @@ def view_profile(request, user_id):
     profile = Profile.objects.get(user_id=user_id)
     art = Art.objects.all().filter(user_id=user_id)
     template = loader.get_template('user_profile/view_profile.html')
-    context = RequestContext(request, {'user': user, 'profile': profile, 'art': art})
+    context = RequestContext(request, {'usr': user, 'profile': profile, 'art': art})
 
     return HttpResponse(template.render(context))
 
