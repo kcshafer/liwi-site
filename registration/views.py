@@ -42,9 +42,10 @@ def artlover_form(request):
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
-            html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
+            html_email = "<a href='http://ec2-54-187-163-227.us-west-2.compute.amazonaws.com/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
+	    print resp
         messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
         return HttpResponseRedirect('/login/')
     else:
@@ -77,7 +78,7 @@ def seller_form(request):
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
-            html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
+            html_email = "<a href='http://ec2-54-187-163-227.us-west-2.compute.amazonaws.com/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
         messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
