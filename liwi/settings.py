@@ -70,8 +70,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'liwi',
         'USER': 'kshafer',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'Rubygem14',
+        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
     },
     'liwi_test': {
@@ -117,7 +117,7 @@ if TESTING:
     MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/photos/'
+    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
