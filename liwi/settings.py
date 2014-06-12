@@ -126,8 +126,8 @@ if TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = 'mail/' 
 else:
-    EMAIL_HOST = 'mailtrap.io'
-    EMAIL_HOST_USER = '21083908bd7b8551c'
-    EMAIL_HOST_PASSWORD = 'f0bc9572503d2b'
-    EMAIL_PORT = '2525'
+    EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
+    EMAIL_HOST_USER = 'AKIAIWCJ3EQ7U75D5I4A'
+    EMAIL_HOST_PASSWORD = 'AmZ2lk55THch3wffs1/tZ3aKc8Fb44W/JImovG9u60Y2'
+    EMAIL_PORT = '25'
     EMAIL_USE_TLS = True
