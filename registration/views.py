@@ -41,7 +41,7 @@ def artlover_form(request):
                 #TODO: ponder what to do with this
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
-            msg = EmailMultiAlternatives('Activate User', email_message , 'noreply@liwi.co', [user.email])
+            msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
@@ -76,7 +76,7 @@ def seller_form(request):
                 #TODO: ponder what to do with this
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
-            msg = EmailMultiAlternatives('Activate User', email_message , 'noreply@liwi.co', [user.email])
+            msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
             html_email = "<a href='localhost:8000/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
