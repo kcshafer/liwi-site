@@ -20,6 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '69)jz9t9^kvci2_8^j732h%a*8yz4h-(kehld1@e2jcw_d9wkn'
 
+AWS_ACCESS_KEY_ID = 'AKIAJEYC7OVXICWHIFMA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_SES_REGION_NAME = 'us-west-2'
+AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -126,8 +131,5 @@ if TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = 'mail/' 
 else:
-    EMAIL_HOST = 'email-smtp.us-west-2.amazonaws.com'
-    EMAIL_HOST_USER = 'AKIAIWCJ3EQ7U75D5I4A'
-    EMAIL_HOST_PASSWORD = 'AmZ2lk55THch3wffs1/tZ3aKc8Fb44W/JImovG9u60Y2'
-    EMAIL_PORT = '25'
-    EMAIL_USE_TLS = True
+    EMAIL_BACKEND = 'django_ses.SESBackend'
+
