@@ -9,6 +9,7 @@ class Art(models.Model):
     photo = models.ImageField(upload_to=upload_to)
     title = models.CharField(max_length=80)
     description = models.TextField()
+    category = models.CharField(max_length=80)
 
     class Meta:
         db_table = 'art'
