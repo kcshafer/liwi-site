@@ -8,8 +8,7 @@ from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
-from art.lib.categorytree import CategoryTree
-from art.models import Art, Like
+from art.models import Art, Like, ArtTag
 from registration.models import User
 
 #index is multi view
@@ -49,9 +48,13 @@ def upload(request):
         if art_form.is_valid():
             art = art_form.save(commit=False)
             category = ast.literal_eval(art_form['categories'].value())
+            print art_form.cleaned_data
             art.category = category.get('name')
             art.user_id = user_id
             art.save()
+            for tag in art_form['tags'].value():
+                tag = ast.literal_eval(tag)
+                ArtTag.objects.create(art_id=art.id, tag_id=tag[1])
             return HttpResponseRedirect('/art/view/%s' % (art.id))
         else:
             print art_form.errors

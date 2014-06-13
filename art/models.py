@@ -23,8 +23,20 @@ class Like(models.Model):
         db_table = 'art_like'
 
 class Category(models.Model):
-    sub_category = models.ForeignKey('self', null=True, blank=True)
     name = models.CharField(max_length=80)
 
     class Meta:
         db_table = 'category'
+
+class Tag(models.Model):
+    name = models.CharField(max_length=80)
+
+    class Meta:
+        db_table = 'tag'
+
+class ArtTag(models.Model):
+    art = models.ForeignKey('art.Art')
+    tag = models.ForeignKey('art.Tag')
+
+    class Meta:
+        db_table = 'art_tag'
