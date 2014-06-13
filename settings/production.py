@@ -133,4 +133,3 @@ if TESTING:
     EMAIL_FILE_PATH = 'mail/' 
 else:
     EMAIL_BACKEND = 'django_ses.SESBackend'
-
