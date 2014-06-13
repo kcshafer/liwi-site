@@ -73,7 +73,6 @@
                 <div class="info">
                     <div class="art_title">{{ a.title }}</div>
                     <br/>
-                    <h2>{{  a.get_tags }}</h2>
                 {% if user.is_authenticated %}
                     <button type="button" id="{{ a.id }}" class="btn btn-default btn-md like_btn">
                     {% if a.id not in liked_art%}
