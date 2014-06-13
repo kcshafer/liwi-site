@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Choose Category</title>
+        {% include 'home/header.html' %}
+    </head>
+
+    <body>
+
+        {% include 'home/navigation.html' %}
+
+        <form id="user_form" method="post" action="/art/upload/"
+                enctype="multipart/form-data">
+
+            <select id="categories">
+            {% for c in categories %}
+                <option value="{{ c.id }}" name="{{ c.name }}" id="{{ c.id }}">{{ c.name }}</li>
+            {% endfor %}
+            </ul>
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Next" />
+        </form>
+
+        <script>
+            $(".categories").change(function(){
+                var cat_id = $(this).find(':selected').val();
+                $.ajax({
+                    type:"POST",
+                    beforeSend: function (xhr, settings)
+                    {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    url: "/art/subcats/" + cat_id + '/',
+                        success: function(res) {
+                            console.log('sucess');
+                            console.log(res);
+                    }
+                })
+            });
+        </script>
+    </body>
+</html>

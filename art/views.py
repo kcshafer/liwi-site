@@ -1,10 +1,12 @@
 from django.shortcuts import render
+from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
+from art.lib.categorytree import CategoryTree
 from art.models import Art, Like
 from registration.models import User
 
@@ -27,13 +29,26 @@ def index(request):
     return HttpResponse(template.render(context))
 
 @login_required
-def create_art_form(request):
+def select_art_category(request):
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    if user.is_artist:
+        template = loader.get_template('art/category_form.html')
+        category_tree = CategoryTree()
+        categories = category_tree.categories
+        context = RequestContext(request, {'categories': categories})
+        cache.set('cat_tree': category_tree)
+        return HttpResponse(template.render(context))
+    else:
+        return HttpResponse('Only registered artists can post artwork for sale.')
+
+@login_required
+def create_art_form(request, category=None, sub_category=None):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     if user.is_artist:
         art_form = ArtForm()
         template = loader.get_template('art/art_form.html')
-        context = RequestContext(request, {'art_form': art_form})
         return HttpResponse(template.render(context))
     else:
         return HttpResponse('Only registered artists can post artwork for sale.')
@@ -59,6 +74,15 @@ def view_art_single(request, art_id):
     context = RequestContext(request, {'art': art})
 
     return HttpResponse(template.render(context))
+
+
+###### METHODS CALLED FROM AJAX #######
+@login_request:
+def get_subcategories(request, cat_id):
+    category_tree = cache.get('cat_tree')
+    sub_cats = category_tree.get_subs(cat_id)
+
+    return sub_cats
 
 @login_required
 def like_art(request, art_id):
