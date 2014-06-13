@@ -61,13 +61,19 @@
     <body>
         {% include 'home/navigation.html' %}
         {% csrf_token %}
+        <ul class="nav nav-pills" id="filter_tags">
+        {% for tag in tags %}
+           <li class="li-{{ tag }}"><a href="#" data-filter="{{  tag  }}" class="filter-btn">{{ tag }}</a></li>
+        {% endfor %}
+        </ul>
         <div id="freewall" class="free-wall">
         {% for a in art %}
-            <div class="brick">
+            <div class="brick {{ a.get_tags }}">
                 <a href="/art/view/{{ a.id }}"><img src="{{ a.photo.url }}" width="100%" /></a>
                 <div class="info">
                     <div class="art_title">{{ a.title }}</div>
                     <br/>
+                    <h2>{{  a.get_tags }}</h2>
                 {% if user.is_authenticated %}
                     <button type="button" id="{{ a.id }}" class="btn btn-default btn-md like_btn">
                     {% if a.id not in liked_art%}
@@ -116,6 +122,14 @@
 
             $(".like_btn_login").click(function(){
                 window.location.replace('/login/')
+            });
+
+            $(".filter-btn").click(function(){
+                tag = $(this).attr('data-filter')
+                $(".active").removeClass('active');
+                $(".li-" + tag).addClass('active');
+                wall.unFilter();
+                wall.filter('.' + tag)
             });
         </script>
     </body>

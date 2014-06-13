@@ -1,4 +1,7 @@
 from django.db import models
+from django import template
+
+register = template.Library()
 
 def upload_to(instance, filename):
     return 'art/%s/%s' % (instance.user.id, filename)
@@ -13,6 +16,11 @@ class Art(models.Model):
 
     class Meta:
         db_table = 'art'
+
+    @register.tag(name="get_tags")
+    def get_tags(self):
+        tags = ArtTag.objects.filter(art__id=self.id).values('tag__name')
+        return ' '.join([t.get('tag__name') for t in tags])
 
 class Like(models.Model):
     user = models.ForeignKey('registration.User')

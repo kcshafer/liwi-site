@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
-from art.models import Art, Like, ArtTag
+from art.models import Art, Like, ArtTag, Tag
 from registration.models import User
 
 #index is multi view
@@ -22,7 +22,11 @@ def index(request):
         for la in liked_art:
             liked_art_ids.append(la.art_id)
         art = Art.objects.all()
-        context = RequestContext(request, {'art' : art, 'liked_art': liked_art_ids})
+        tags = cache.get('tags')
+        if not tags:
+            tags = Tag.objects.all().values('name')
+            tags = [t.get('name') for t in tags]
+        context = RequestContext(request, {'art' : art, 'liked_art': liked_art_ids, 'tags': tags})
     else:
         art = Art.objects.all()
         context = RequestContext(request, {'art' : art})
