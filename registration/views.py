@@ -11,7 +11,13 @@ from django.template import loader, RequestContext
 from registration.forms import CustomerRegistration, SellerRegistration
 from registration.models import User, SecurityAnswer
 from user_profile.models import Profile
-from liwi import settings
+from liwi import globals
+
+if globals.PRODUCTION:
+    from settings import production as settings
+else:
+    from settings import development as settings
+
 
 def index(request):
     template = loader.get_template('registration/index.html')
