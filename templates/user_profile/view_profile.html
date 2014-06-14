@@ -93,6 +93,17 @@
                     {% endfor %}
                 </div>
         {% endif %}
+        <h1>{{ usr.username }}'s Favorites</h1>
+        <div class="free-wall">
+        {% for a in liked_art %}
+            <div class="brick">
+                <a href="/art/view/{{ a.id }}"><img src="{{ MEDIA_URL }}{{ a.art__photo }}" width="100%"/></a>
+                <div class="info">
+                    <div class="art_title">{{ a.art__title }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
         <script>
             var wall = new freewall("#freewall");
             wall.reset({
