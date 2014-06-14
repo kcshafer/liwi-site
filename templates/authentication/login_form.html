@@ -12,7 +12,9 @@
 
             {% csrf_token %}
             {{ login_form.as_p }}
-
+            {% if next %}
+                <input type='hidden' value='{{ next }}' name='next'>
+            {% endif %}
             <!-- Provide a button to click to submit the form. -->
             <a href="/forgotpassword/">Forgot Password?</a>
             <input type="submit" name="submit" value="Login" />

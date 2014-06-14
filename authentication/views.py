@@ -11,8 +11,9 @@ from registration.models import User, SecurityAnswer, SecurityQuestion
 
 def index(request):
     login_form = LoginForm()
+    next = request.GET.get('next')
     template = loader.get_template('authentication/login_form.html')
-    context = RequestContext(request, {'login_form': login_form})
+    context = RequestContext(request, {'login_form': login_form, 'next': next})
 
     return HttpResponse(template.render(context))
 
@@ -24,7 +25,14 @@ def login(request):
         if user is not None and user.is_active:
             auth.login(request, user)
             request.session['user_id'] = user.id
-            return HttpResponseRedirect('/')
+            print request.POST
+            print request.POST.get('next')
+            if request.POST.get('next', None) is not None:
+                print "NEXXT"
+                print request.POST.get('next')
+                return HttpResponseRedirect(request.POST.get('next'))
+            else:
+                return HttpResponseRedirect('/')
         else:
             return HttpResponse('User not found or password incorrect')
     else:
