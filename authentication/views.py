@@ -25,11 +25,7 @@ def login(request):
         if user is not None and user.is_active:
             auth.login(request, user)
             request.session['user_id'] = user.id
-            print request.POST
-            print request.POST.get('next')
             if request.POST.get('next', None) is not None:
-                print "NEXXT"
-                print request.POST.get('next')
                 return HttpResponseRedirect(request.POST.get('next'))
             else:
                 return HttpResponseRedirect('/')
