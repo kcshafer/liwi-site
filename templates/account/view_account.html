@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        {% include 'home/header.html' %}
+    </head>
+
+    <body>
+    {% include 'home/navigation.html' %}
+        <button class="btn btn-default btn-lg"><a href="/account/edit/">Edit Account</a></button>
+        <table>
+            <tr>
+                <td>{{ usr.city }}, {{ usr.state }}</td>
+            </tr>
+            <tr>
+                <td>{{ usr.email }}</td>
+            </tr>
+            <tr>
+                <td><a href="#">Change Password</a></td>
+            </tr>
+        </table>
+    </body>
+</html>

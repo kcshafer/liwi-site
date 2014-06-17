@@ -7,9 +7,6 @@ class User(AbstractUser):
     city = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
 
-    class Meta:
-        db_table = 'user'
-
 class SecurityQuestion(models.Model):
     question = models.CharField(max_length = 250, null=False)
 

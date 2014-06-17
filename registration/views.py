@@ -1,14 +1,15 @@
 import ast
 from os import mkdir 
 
+from django.contrib.auth.decorators import login_required
 from django.core.mail  import get_connection
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render
 from django.template import loader, RequestContext
 
-from registration.forms import CustomerRegistration, SellerRegistration
+from registration.forms import CustomerRegistration, SellerRegistration, AccountForm
 from registration.models import User, SecurityAnswer
 from user_profile.models import Profile
 from liwi import globals
@@ -51,7 +52,6 @@ def artlover_form(request):
             html_email = "<a href='http://ec2-54-187-163-227.us-west-2.compute.amazonaws.com/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
-	    print resp
         messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
         return HttpResponseRedirect('/login/')
     else:
@@ -107,3 +107,31 @@ def activate_user(request, user_id):
 
     return HttpResponseRedirect('/login/')
 
+@login_required
+def view_account(request):
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    template = loader.get_template('account/view_account.html')
+    context = RequestContext(request, {'usr': user})
+    return HttpResponse(template.render(context))
+
+def edit_account(request):
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    acct_form = AccountForm(instance=user)
+    template = loader.get_template('account/edit_account.html')
+    context = RequestContext(request, {'acct_form': acct_form})
+    return HttpResponse(template.render(context))
+
+def save_account(request):
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        user = User.objects.get(id=user_id)
+        acct_form = AccountForm(request.POST, instance=user)
+        if acct_form.is_valid():
+            user = acct_form.save()
+            user.save()
+        return HttpResponseRedirect('/account/')
+    else:
+        #this might need to return something more ui friendly
+        return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')

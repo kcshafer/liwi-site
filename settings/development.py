@@ -115,6 +115,7 @@ AUTH_USER_MODEL = 'registration.User'
 LOGIN_URL = '/login'
 
 if TESTING:
+    SOUTH_TESTS_MIGRATE = False # To disable migrations and use syncdb instead
     MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:

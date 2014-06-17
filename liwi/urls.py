@@ -2,9 +2,6 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 
-import home
-import authentication
-
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -17,6 +14,9 @@ urlpatterns = patterns('',
     url(r'^resetpassword/valid', 'authentication.views.validate_answer'), #validate secret question
     url(r'^resetpassword/', 'authentication.views.reset_password'), #validate secret question
     url(r'^forgotpassword', 'authentication.views.forgot_password'), #forgot password
+    url(r'^account/edit/', 'registration.views.edit_account', name='edit_settings'),
+    url(r'^account/save/', 'registration.views.save_account', name='save_account'),
+    url(r'^account/', 'registration.views.view_account', name='view_settings'),
 
     #complex views
     url(r'^admin/', include(admin.site.urls)), # admin app

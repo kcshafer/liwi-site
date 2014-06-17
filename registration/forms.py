@@ -32,4 +32,10 @@ class SellerRegistration(forms.ModelForm):
             except:
                 pass
                 
-            return self.cleaned_data     
+            return self.cleaned_data
+
+class AccountForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('city', 'state', 'email')
