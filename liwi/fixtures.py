@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import make_password
 
 from art.models import Art, Like, Category, Tag, ArtTag
 from registration.models import User
+from user_profile.models import Profile
 
 def create_user(username, password, email, first_name, last_name, is_artist=True):
     hashed_password = make_password(password)
@@ -37,4 +38,9 @@ def create_art_tag(art_id, tag_id):
 def create_art_like(user_id, art_id):
     return Like.objects.create(
         user_id=user_id, art_id=art_id
+    )
+
+def create_user_profile(user_id, bio, twitter, photo):
+    return Profile.objects.create(
+        user_id=user_id, bio=bio, twitter=twitter, photo=photo
     )
