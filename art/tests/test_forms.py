@@ -2,7 +2,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from art.forms import ArtForm
-from art.tests import fixtures
+from liwi import fixtures
 
 class ArtFormsTests(TestCase):
 

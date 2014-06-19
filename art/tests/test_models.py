@@ -2,7 +2,7 @@ from django.core.files.base import File
 from django.test import TestCase
 
 from art.models import Art, Like, Category, Tag, ArtTag
-from art.tests import fixtures
+from liwi import fixtures
 
 class ArtModelsTests(TestCase):
 

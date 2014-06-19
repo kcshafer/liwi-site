@@ -61,7 +61,6 @@ def upload(request):
                 ArtTag.objects.create(art_id=art.id, tag_id=tag[1])
             return HttpResponseRedirect('/art/view/%s' % (art.id))
         else:
-            print art_form.errors
             return HttpResponse(art_form.errors)
     else:
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')

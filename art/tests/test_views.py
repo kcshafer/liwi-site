@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.test import TestCase
 
-from art.tests import fixtures
+from liwi import fixtures
 
 class ArtViewsTests(TestCase):
     def setUp(self):
