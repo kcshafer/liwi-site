@@ -37,7 +37,6 @@ def save_profile(request):
         if profile_form.is_valid():
             profile = profile_form.save()
             profile.save()
-        print profile_form.errors
         return HttpResponseRedirect('/profile/view/%s' % (user_id))
     else:
         #this might need to return something more ui friendly

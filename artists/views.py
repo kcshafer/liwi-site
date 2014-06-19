@@ -1,7 +1,4 @@
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from registration.models import User
