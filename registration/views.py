@@ -2,11 +2,9 @@ import ast
 from os import mkdir 
 
 from django.contrib.auth.decorators import login_required
-from django.core.mail  import get_connection
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render
 from django.template import loader, RequestContext
 
 from registration.forms import CustomerRegistration, SellerRegistration, AccountForm
@@ -81,6 +79,7 @@ def seller_form(request):
                 secret_answer.answer = secret_answer_val
             except:
                 #TODO: ponder what to do with this
+                print "issue"
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
@@ -115,6 +114,7 @@ def view_account(request):
     context = RequestContext(request, {'usr': user})
     return HttpResponse(template.render(context))
 
+@login_required
 def edit_account(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
@@ -123,6 +123,7 @@ def edit_account(request):
     context = RequestContext(request, {'acct_form': acct_form})
     return HttpResponse(template.render(context))
 
+@login_required()
 def save_account(request):
     if request.method == 'POST':
         user_id = request.session['user_id']
