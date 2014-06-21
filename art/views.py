@@ -1,4 +1,5 @@
 import ast
+import logging
 
 from django.shortcuts import render
 from django.core.cache import cache
@@ -10,6 +11,8 @@ from django.template import loader, RequestContext
 from art.forms import ArtForm
 from art.models import Art, Like, ArtTag, Tag
 from registration.models import User
+
+log = logging.getLogger('liwi')
 
 #index is multi view
 def index(request):
@@ -43,6 +46,7 @@ def create_art_form(request, category=None, sub_category=None):
         context = RequestContext(request, {'art_form': art_form})
         return HttpResponse(template.render(context))
     else:
+        log.warn("Non artist attempted to post art with user id %s" % user_id)
         return HttpResponse('Only registered artists can post artwork for sale.')
 
 def upload(request):
@@ -63,6 +67,7 @@ def upload(request):
         else:
             return HttpResponse(art_form.errors)
     else:
+        log.warn("Unauthorized post request made to upload view")
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
 
 def view_art_single(request, art_id):

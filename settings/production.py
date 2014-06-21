@@ -34,7 +34,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -119,11 +118,13 @@ AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/login'
 
+SITE_ROOT = '/Users/kshafer/workspace/liwi/'
+
 if TESTING:
-    MEDIA_ROOT = '/Users/kshafer/workspace/Django/liwi/test_photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
@@ -133,3 +134,49 @@ if TESTING:
     EMAIL_FILE_PATH = 'mail/' 
 else:
     EMAIL_BACKEND = 'django_ses.SESBackend'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
+        'logfile': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': SITE_ROOT + "/logfile.txt",
+            'maxBytes': 50000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['console'],
+            'propagate': True,
+            'level':'WARN',
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'liwi': {
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
+        },
+    }
+}

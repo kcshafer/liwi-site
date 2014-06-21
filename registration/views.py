@@ -1,4 +1,5 @@
 import ast
+import logging
 from os import mkdir 
 
 from django.contrib.auth import hashers
@@ -17,6 +18,8 @@ if globals.PRODUCTION:
     from settings import production as settings
 else:
     from settings import development as settings
+
+log = logging.getLogger('liwi')
 
 
 def index(request):
@@ -80,7 +83,6 @@ def seller_form(request):
                 secret_answer.answer = secret_answer_val
             except:
                 #TODO: ponder what to do with this
-                print "issue"
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
@@ -103,6 +105,7 @@ def activate_user(request, user_id):
         mkdir('%suser/%s' % (settings.MEDIA_ROOT,user_id))
         user.save()
     else:
+        log.warn("User with id %s trying to activate when already active" % user.id)
         messages.add_message(request, messages.ERROR, 'Invalid request. User is already activated.')
 
     return HttpResponseRedirect('/login/')
@@ -136,6 +139,7 @@ def save_account(request):
         return HttpResponseRedirect('/account/')
     else:
         #this might need to return something more ui friendly
+        log.warn("Unauthorized post request made to save account")
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
 
 @login_required
@@ -160,5 +164,6 @@ def change_password(request):
                 messages.add_message(request, messages.SUCCESS, 'Incorrect password')
                 return HttpResponseRedirect('/account/edit/')
     else:
+        log.warn("Unauthorized post request made to change password")
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
 

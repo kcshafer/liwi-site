@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import auth, messages
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
@@ -8,6 +10,8 @@ from django.template import loader, RequestContext
 
 from authentication.forms import LoginForm
 from registration.models import User, SecurityAnswer, SecurityQuestion
+
+log = logging.getLogger('liwi')
 
 #Note: the index is where the login form is rendered
 def index(request):
@@ -34,6 +38,7 @@ def login(request):
             return HttpResponse('User not found or password incorrect')
     else:
         #this might need to return something more ui friendly
+        log.error("Unauthorized get request made to login")
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
 
 def logout(request):

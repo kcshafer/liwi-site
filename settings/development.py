@@ -20,6 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '69)jz9t9^kvci2_8^j732h%a*8yz4h-(kehld1@e2jcw_d9wkn'
 
+AWS_ACCESS_KEY_ID = 'AKIAJEYC7OVXICWHIFMA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_SES_REGION_NAME = 'us-west-2'
+AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -71,16 +76,16 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'liwi',
         'USER': 'kshafer',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'Rubygem14',
+        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
     },
     'liwi_test': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'liwi',
+        'NAME': 'liwi_test',
         'USER': 'kshafer',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'Rubygem14',
+        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -115,11 +120,10 @@ AUTH_USER_MODEL = 'registration.User'
 LOGIN_URL = '/login'
 
 if TESTING:
-    SOUTH_TESTS_MIGRATE = False # To disable migrations and use syncdb instead
-    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
+    MEDIA_ROOT = '/home/ubuntu/liwi-site/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/photos/'
+    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
@@ -128,8 +132,4 @@ if TESTING:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
     EMAIL_FILE_PATH = 'mail/' 
 else:
-    EMAIL_HOST = 'mailtrap.io'
-    EMAIL_HOST_USER = '21083908bd7b8551c'
-    EMAIL_HOST_PASSWORD = 'f0bc9572503d2b'
-    EMAIL_PORT = '2525'
-    EMAIL_USE_TLS = True
+    EMAIL_BACKEND = 'django_ses.SESBackend'

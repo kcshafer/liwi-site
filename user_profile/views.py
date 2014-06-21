@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
@@ -8,6 +10,8 @@ from art.models import Art, Like
 from registration.models import User
 from user_profile.forms import MyProfileForm
 from user_profile.models import Profile
+
+log = logging.getLogger('liwi')
 
 def view_profile(request, user_id):
     user = User.objects.get(id=user_id)
@@ -40,4 +44,5 @@ def save_profile(request):
         return HttpResponseRedirect('/profile/view/%s' % (user_id))
     else:
         #this might need to return something more ui friendly
+        log.warn('Unauthorized post made to save profile view')
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
