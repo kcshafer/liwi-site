@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^forgotpassword', 'authentication.views.forgot_password'), #forgot password
     url(r'^account/edit/', 'registration.views.edit_account', name='edit_settings'),
     url(r'^account/save/', 'registration.views.save_account', name='save_account'),
+    url(r'^account/changepassword/', 'registration.views.change_password', name='change_password'),
     url(r'^account/', 'registration.views.view_account', name='view_settings'),
 
     #complex views

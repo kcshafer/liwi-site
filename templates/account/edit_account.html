@@ -16,5 +16,20 @@
             <!-- Provide a button to click to submit the form. -->
             <input type="submit" name="submit" value="Save" />
         </form>
+
+        <form id="change_password" method="post" action="/account/changepassword/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            Old Password:<input type="password" name="old_password"/>
+            <br/>
+            New Password:<input type="password" name="new_password"/>
+            <br/>
+            Re-Enter Password:<input type="password" name="re_new_password"/>
+            <br/>
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Change Password" />
+        </form>
     </body>
 </html>

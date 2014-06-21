@@ -253,3 +253,120 @@ class RegistrationViewsTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(parsed_url.path, '/login')
         self.assertEqual(parsed_url.query, 'next=/account/save/')
+
+    def test_change_password_post_success(self):
+        """
+            test an authenticated post request to change password successful
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        post_dict = {'old_password': 'password', 'new_password': 'password1', 're_new_password': 'password1'}
+
+        url = reverse('registration.views.change_password')
+        resp = self.client.post(url, post_dict, follow=True)
+        resp_url = (resp.__dict__.get('redirect_chain')[0])[0]
+        parsed_url = urlparse(resp_url)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(parsed_url.path, '/account/')
+
+    def test_change_password_post_password_failure(self):
+        """
+            test an authenticated post request to change password fails because password is incorrect
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        post_dict = {'old_password': 'wrong_password', 'new_password': 'password1', 're_new_password': 'password1'}
+
+        url = reverse('registration.views.change_password')
+        resp = self.client.post(url, post_dict, follow=True)
+        resp_url = (resp.__dict__.get('redirect_chain')[0])[0]
+        parsed_url = urlparse(resp_url)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(parsed_url.path, '/account/edit/')
+
+    def test_change_password_post_match_failure(self):
+        """
+            test an authenticated post request to change password fails because passwords don't match
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        post_dict = {'old_password': 'password', 'new_password': 'password2', 're_new_password': 'password1'}
+
+        url = reverse('registration.views.change_password')
+        resp = self.client.post(url, post_dict, follow=True)
+        resp_url = (resp.__dict__.get('redirect_chain')[0])[0]
+        parsed_url = urlparse(resp_url)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(parsed_url.path, '/account/edit/')
+
+    def test_change_password_post_unauthenticated(self):
+        """
+            test an authenticated post request to change password fails because passwords don't match
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        post_dict = {'old_password': 'password', 'new_password': 'password2', 're_new_password': 'password1'}
+
+        url = reverse('registration.views.change_password')
+        resp = self.client.post(url, post_dict, follow=True)
+        resp_url = (resp.__dict__.get('redirect_chain')[0])[0]
+        parsed_url = urlparse(resp_url)
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(parsed_url.path, '/login')
+        self.assertEqual(parsed_url.query, 'next=/account/changepassword/')
+
+    def test_change_password_get(self):
+        """
+            test a get request to the change password view
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse('registration.views.change_password')
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 405)
+        self.assertEqual(resp.__dict__.get('reason_phrase'), 'METHOD NOT ALLOWED')

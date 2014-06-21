@@ -1,6 +1,7 @@
 import ast
 from os import mkdir 
 
+from django.contrib.auth import hashers
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
@@ -136,3 +137,28 @@ def save_account(request):
     else:
         #this might need to return something more ui friendly
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        user = User.objects.get(id=user_id)
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        re_new_password = request.POST.get('re_new_password')
+        if hashers.check_password(old_password, user.password):
+            if new_password == re_new_password:
+                secure_password = hashers.make_password(new_password)
+                user.password = secure_password
+                user.save()
+                messages.add_message(request, messages.SUCCESS, 'Password changed successfully')
+                return HttpResponseRedirect('/account/')
+            else:
+                messages.add_message(request, messages.SUCCESS, 'Passwords do not match.')
+                return HttpResponseRedirect('/account/edit/')
+        else:
+                messages.add_message(request, messages.SUCCESS, 'Incorrect password')
+                return HttpResponseRedirect('/account/edit/')
+    else:
+        return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
+
