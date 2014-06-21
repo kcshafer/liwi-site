@@ -118,13 +118,13 @@ AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/login'
 
-SITE_ROOT = '/Users/kshafer/workspace/liwi/'
+SITE_ROOT = '/home/ubuntu/liwi-site'
 
 if TESTING:
-    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
+    MEDIA_ROOT = '/home/ubuntu/liwi-site/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/photos/'
+    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
