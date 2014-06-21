@@ -46,9 +46,9 @@ def create_user_profile(user_id, bio, twitter, photo):
     )
 
 def create_security_question(question):
-    return SecurityQuestion(question=question)
+    return SecurityQuestion.objects.create(question=question)
 
 def create_secret_answer(user_id, question_id, answer):
-    return SecurityAnswer(
+    return SecurityAnswer.objects.create(
         user_id=user_id, security_questions_id=question_id, answer=answer
     )
