@@ -9,6 +9,7 @@ from django.template import loader, RequestContext
 from authentication.forms import LoginForm
 from registration.models import User, SecurityAnswer, SecurityQuestion
 
+#Note: the index is where the login form is rendered
 def index(request):
     login_form = LoginForm()
     next = request.GET.get('next')
@@ -37,7 +38,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/login/')
 
 def forgot_password(request):
     if request.method == 'POST':
@@ -45,7 +46,7 @@ def forgot_password(request):
         if User.objects.filter(username=username).count():
             user = User.objects.get(username=username)
             cache.set('user_id', user.id, 30)
-            return HttpResponseRedirect('/resetpassword/valid')
+            return HttpResponseRedirect('/resetpassword/valid/')
         else:
             messages.add_message(request, messages.ERROR, 'Username does not exist, please try again.')
             return HttpResponseRedirect('forgotpassword/') 
@@ -94,14 +95,14 @@ def reset_password(request):
                 user = User.objects.get(id=user_id)
                 user.password = secure_pw
                 user.save()
-                return HttpResponseRedirect('/login')
+                return HttpResponseRedirect('/login/')
             else:
                 messages.add_message(request, messages.ERROR, 'Passwords did not match try again')
                 cache.set('user_id', user_id, 30)
-                return HttpResponse('/resetpassword')
+                return HttpResponse('/resetpassword/')
         else:
             messages.add_message(request, messages.ERROR, 'Request timed out, please try again.')
-            return HttpResponseRedirect('forgotpassword/')
+            return HttpResponseRedirect('/forgotpassword/')
     else:
         user_id = cache.get('user_id')
         context = RequestContext(request)
