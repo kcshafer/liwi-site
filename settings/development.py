@@ -77,15 +77,15 @@ DATABASES = {
         'NAME': 'liwi',
         'USER': 'kshafer',
         'PASSWORD': 'Rubygem14',
-        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
+        'HOST': 'localhost',
         'PORT': '5432',
     },
     'liwi_test': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'liwi_test',
-        'USER': 'kshafer',
-        'PASSWORD': 'Rubygem14',
-        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -120,10 +120,10 @@ AUTH_USER_MODEL = 'registration.User'
 LOGIN_URL = '/login'
 
 if TESTING:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/test_photos/'
+    MEDIA_ROOT = '/Users/kcshafer/workspace/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
+    MEDIA_ROOT = '/Users/kcshafer/workspace/liwi/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
