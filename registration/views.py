@@ -14,6 +14,7 @@ from registration.models import User, SecurityAnswer
 from user_profile.models import Profile
 from liwi import globals
 
+#TODO: This has to go
 if globals.PRODUCTION:
     from settings import production as settings
 else:
