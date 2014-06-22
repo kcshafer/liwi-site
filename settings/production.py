@@ -81,10 +81,10 @@ DATABASES = {
     },
     'liwi_test': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'liwi',
+        'NAME': 'liwi_test',
         'USER': 'kshafer',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': 'Rubygem14',
+        'HOST': 'liwi.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
