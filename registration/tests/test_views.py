@@ -52,6 +52,48 @@ class RegistrationViewsTests(TestCase):
 
         self.assertEqual(resp.status_code, 302)
 
+    def test_artlover_form_post_duplicate_username(self):
+        """
+            test a post request to the art lover form with a duplicate username
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user2@test.com', first_name='test',
+            last_name='user'
+        )
+
+        post_dict = {
+            'password': 'password', 'username': 'test_user',
+            'email': 'test@email.com', 'first_name': 'test',
+            'last_name': 'user'
+        }
+
+        url = reverse(('registration.views.artlover_form'))
+        resp = self.client.post(url, post_dict)
+
+        self.assertEqual(resp.status_code, 200)
+
+    def test_artlover_form_post_duplicate_email(self):
+        """
+            test a post request to the art lover form with a duplicate email
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        post_dict = {
+            'password': 'password', 'username': 'test_user2',
+            'email': 'user@test.com', 'first_name': 'test',
+            'last_name': 'user'
+        }
+
+        url = reverse(('registration.views.artlover_form'))
+        resp = self.client.post(url, post_dict)
+
+        self.assertEqual(resp.status_code, 200)
+
     def test_seller_form_get(self):
         """
             test a get request to the seller form
@@ -77,6 +119,48 @@ class RegistrationViewsTests(TestCase):
         resp = self.client.post(url, post_dict)
 
         self.assertEqual(resp.status_code, 302)
+
+    def test_seller_form_post_duplicate_username(self):
+        """
+            test a post request to seller form with a duplicate username
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user2@test.com', first_name='test',
+            last_name='user'
+        )
+
+        post_dict = {
+            'password': 'password', 'username': 'test_user',
+            'email': 'test@email.com', 'first_name': 'test',
+            'last_name': 'user'
+        }
+
+        url = reverse('registration.views.seller_form')
+        resp = self.client.post(url, post_dict)
+
+        self.assertEqual(resp.status_code, 200)
+
+    def test_artlover_form_post_duplicate_email(self):
+        """
+            test a post request to the seller form with a duplicate email
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password',
+            email='user@test.com', first_name='test',
+            last_name='user'
+        )
+
+        post_dict = {
+            'password': 'password', 'username': 'test_user2',
+            'email': 'user@test.com', 'first_name': 'test',
+            'last_name': 'user'
+        }
+
+        url = reverse('registration.views.seller_form')
+        resp = self.client.post(url, post_dict)
+
+        self.assertEqual(resp.status_code, 200)
 
     def test_activate_user_success(self):
         """
