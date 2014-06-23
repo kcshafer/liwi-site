@@ -47,8 +47,8 @@ def artlover_form(request):
                 secret_answer.user_id = user.id
                 secret_answer.security_questions_id = secret_question.get('id')
                 secret_answer.answer = secret_answer_val
-            except:
-                #TODO: ponder what to do with this
+                secret_answer.save()
+            except Exception as e:
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
             msg = EmailMultiAlternatives('Activate User', email_message , 'liwimail2014@gmail.com', [user.email])
@@ -82,7 +82,9 @@ def seller_form(request):
                 secret_answer.user_id = user.id
                 secret_answer.security_questions_id = secret_question.get('id')
                 secret_answer.answer = secret_answer_val
-            except:
+                secret_answer.save()
+            except Exception as e:
+                print e.args
                 #TODO: ponder what to do with this
                 pass
             email_message = "Your Liwi account was created, activate it by clicking the link. localhost:8000/registration/activate/%s" % (user.id)
