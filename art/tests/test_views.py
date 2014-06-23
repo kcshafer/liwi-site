@@ -20,6 +20,74 @@ class ArtViewsTests(TestCase):
 
         self.assertEqual(resp.status_code, 200)
 
+    def test_my_art_admin_artist_authenticated(self):
+        """
+            test a get request to the my artist admin view as an authenticated artist
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.my_art_admin")
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+    def test_my_art_admin_artist_unauthenticated(self):
+        """
+            test a get request to the my artist admin view as an unauthenticated artist
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+
+        url = reverse("art.views.my_art_admin")
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 302)
+
+    def test_my_art_admin_non_artist_authenticated(self):
+        """
+            test a get request to the my artist admin view as an authenticated non artist
+        """
+        art_user = fixtures.create_user(
+            username='test_artist', password='password', email='art@test.com', first_name='art', last_name='user'
+        )
+
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user', is_artist=False
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % art_user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.my_art_admin")
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 302)
+
+
     def test_art_index_authenticated(self):
         user = fixtures.create_user(
             username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
@@ -148,3 +216,109 @@ class ArtViewsTests(TestCase):
         resp = self.client.post(url)
 
         self.assertEqual(resp.status_code, 200)
+
+    def test_handle_art_activation_authenticated_post_artist(self):
+        """
+            test a post request to the handle_art_activation authenticated with an artist user
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.handle_art_activation", args=(art.id, ))
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.__dict__.get('_container')[0], 'Activate')
+
+    def test_handle_art_deactivation_authenticated_post_artist(self):
+        """
+            test a post request to the handle_art_activation deactivation authenticated with an artist user
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id,
+            photo=('test_photos/art/%s/test_photo.jpg' % user.id), active=False,
+            title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.handle_art_activation", args=(art.id, ))
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.__dict__.get('_container')[0], 'Deactivate')
+
+    def test_handle_art_activation_authenticated_post_artist(self):
+        """
+            test a post request to the handle_art_activation authenticated with an artist user
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.handle_art_activation", args=(art.id, ))
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.__dict__.get('_container')[0], 'Activate')
+
+    def test_handle_art_activation_unauthenticated_post_(self):
+        """
+            test a post request to the handle_art_activation unauthenticated
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+
+        url = reverse("art.views.handle_art_activation", args=(art.id, ))
+        resp = self.client.post(url)
+        self.assertEqual(resp.status_code, 302)
+
+    def test_handle_art_action_get(self):
+        """
+            test a get request to the handle_art_activation
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        category = fixtures.create_category(name='Test Category')
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        url = reverse("art.views.handle_art_activation", args=(art.id, ))
+        resp = self.client.get(url)
+        self.assertEqual(resp.status_code, 405)

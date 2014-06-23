@@ -1,9 +1,11 @@
 import ast
 import logging
 
+from django.contrib import messages
 from django.shortcuts import render
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
@@ -35,6 +37,24 @@ def index(request):
         context = RequestContext(request, {'art' : art})
 
     return HttpResponse(template.render(context))
+
+@login_required
+def my_art_admin(request):
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    if user.is_artist:
+        art = Art.objects.values('title', 'id', 'photo', 'active').annotate(likes=Count('like'))
+        tags = cache.get('tags')
+        if not tags:
+            tags = Tag.objects.all().values('name')
+            tags = [t.get('name') for t in tags]
+        context = RequestContext(request, {'art': art, 'tags': tags})
+        template = loader.get_template('art/my_art_view.html')
+        return HttpResponse(template.render(context))
+    else:
+        messages.add_message(request, messages.WARNING, 'Only artists can view the my art admin page')
+        return HttpResponseRedirect('/')
+
 
 @login_required
 def create_art_form(request, category=None, sub_category=None):
@@ -84,3 +104,14 @@ def like_art(request, art_id):
     Like.objects.create(user_id=user_id, art_id=art_id, art_user_like=art_user_like)
 
     return HttpResponse('Liked!')
+
+@login_required
+def handle_art_activation(request, art_id):
+    if request.method == 'POST':
+        art = Art.objects.get(id=art_id)
+        art.active = False if art.active is True else True
+        art.save()
+        return HttpResponse('Deactivate' if art.active is True else 'Activate')
+    else:
+        log.warn("Unauthorized post request made to art activate view")
+        return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')

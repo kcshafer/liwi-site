@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LiWi Art</title>
+        {% include 'home/header.html' %}
+        {% load staticfiles %}
+        <script src="{% static "js/freewall.js" %}"></script>
+        <style type="text/css">
+            body {
+                background: rgba(231, 231, 231, 0.43);
+            }
+            .free-wall {
+                margin: 15px;
+            }
+            .brick {
+                width: 221.2px;
+            }
+            .info {
+                padding: 15px;
+                color: #333;
+            }
+            .brick img {
+                margin: 0px;
+                padding: 0px;
+                display: block;
+            }
+            body {
+            background: #e8e8e8;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+        }
+
+        .brick {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+            border-radius: 3px;
+            color: #333;
+            border: none;
+        }
+
+
+        .brick .img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        .brick h3, .brick h5 {
+            text-shadow: none;
+        }
+
+        .art_title {
+            /*margin-bottom: 5px !important;*/
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        </style>
+    </head>
+    <body>
+
+        {% include 'home/navigation.html' %}
+        {% csrf_token %}
+        <ul class="nav nav-pills" id="filter_tags">
+        {% for tag in tags %}
+           <li class="li-{{ tag }}"><a href="#" data-filter="{{  tag  }}" class="filter-btn">{{ tag }}</a></li>
+        {% endfor %}
+        </ul>
+        <div id="freewall" class="free-wall">
+        {% for a in art %}
+            <div class="brick {{ a.get_tags }}">
+                <a href="/art/view/{{ a.id }}"><img src="/photos/{{ a.photo }}" width="100%" /></a>
+                <div class="info">
+                    {% if a.active %}
+                        <button name="deactivate_art" value="activate" art_id="{{ a.id }}" class="action_art">Deactivate</button>
+                    {% else %}
+                        <button name="activate_art" value="deactivate" art_id="{{ a.id }}" class="action_art">Activate</button>
+                    {% endif %}
+                    <div class="art_title">{{ a.title }}</div>
+                    <h3>Total Likes</h3>
+                    <div class="art_likes">{{ a.likes }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        <script>
+        var wall = new freewall("#freewall");
+            wall.reset({
+                selector: '.brick',
+                animate: true,
+                cellW: 200,
+                cellH: 'auto',
+                onResize: function() {
+                    wall.fitWidth();
+                }
+            });
+
+            wall.container.find('.brick img').load(function() {
+                wall.fitWidth();
+            });
+
+            $(".filter-btn").click(function(){
+                tag = $(this).attr('data-filter')
+                $(".active").removeClass('active');
+                $(".li-" + tag).addClass('active');
+                wall.unFilter();
+                wall.filter('.' + tag)
+            });
+
+            var x;
+            $(".action_art").click(function(){
+                var btn = this;
+                $.ajax({
+                type:"POST",
+                beforeSend: function (xhr, settings)
+                {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                },
+                url: "/art/activate/" + this.attributes['art_id'].value + '/',
+                success: function(data) {
+                    x = btn;
+                    console.log(btn)
+                    btn.textContent = data;
+                }
+                })
+            });
+        </script>
+    </body>
+</html>
