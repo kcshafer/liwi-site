@@ -74,11 +74,14 @@
                     <div class="art_title">{{ a.title }}</div>
                     <br/>
                 {% if user.is_authenticated %}
-                    <button type="button" id="{{ a.id }}" class="btn btn-default btn-md like_btn">
                     {% if a.id not in liked_art%}
-                        <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"> Like</span>
+                       <button type="button" id="{{ a.id }}" class="btn btn-default btn-md like_btn">
+                            <span id="heart-{{ a.id }}"class="glyphicon glyphicon-heart-empty"> Like</span>
+                       </button>
                     {% else %}
-                      <span class="glyphicon glyphicon-heart"></span> Liked
+                        <button type="button" id="{{ a.id }}" class="btn btn-default btn-md btn_unlike">
+                            <span id="heart-{{ a.id }}" class="glyphicon glyphicon-heart"> Unlike</span>
+                        </button>
                     {% endif %}
                     </button>
                 {% else %}
@@ -104,17 +107,42 @@
             wall.container.find('.brick img').load(function() {
                 wall.fitWidth();
             });
-            $(".like_btn").click(function(){
-                    $("#heart-" + this.id).attr('class', 'glyphicon glyphicon-heart');
-                    $("#heart-" + this.id).text(" Liked");
+            $("body").on('click', '.like_btn', function(){
+                btn = this;
+                $("#heart-" + this.id).attr('class', 'glyphicon glyphicon-heart');
+                $("#heart-" + this.id).text('Unlike');
+                $(this).removeClass('like_btn');
+                $(this).addClass('btn_unlike')
+                $.ajax({
+                    type:"POST",
+                    beforeSend: function (xhr, settings)
+                    {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    url: "/art/like/" + this.id + '/',
+                    success: function() {
+                        $(btn).removeClass('like_btn');
+                        $(btn).addClass('unlike_btn')
+                        $("#heart-" + btn.id).attr('class', 'glyphicon glyphicon-heart');
+                        $("#heart-" + btn.id).text("Unlike");
+                    }
+                })
+            });
+
+            $("body").on('click', ".btn_unlike", function(){
+                   btn = this;
                    $.ajax({
                         type:"POST",
                         beforeSend: function (xhr, settings)
                         {
                             xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
                         },
-                        url: "/art/like/" + this.id + '/',
+                        url: "/art/unlike/" + this.id + '/',
                         success: function() {
+                            $(btn).removeClass('btn_unlike');
+                            $(btn).addClass('like_btn')
+                            $("#heart-" + btn.id).attr('class', 'glyphicon glyphicon-heart-empty');
+                            $("#heart-" + btn.id).text("Like");
                         }
                 })
             });

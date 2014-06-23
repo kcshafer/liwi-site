@@ -106,6 +106,16 @@ def like_art(request, art_id):
     return HttpResponse('Liked!')
 
 @login_required
+def unlike_art(request, art_id):
+    if request.method == 'POST':
+        user_id = request.session['user_id']
+        Like.objects.get(user_id=user_id, art_id=art_id).delete()
+        return HttpResponse('Unliked!')
+    else:
+        log.warn("Unauthorized post request made to art activate view")
+        return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
+
+@login_required
 def handle_art_activation(request, art_id):
     if request.method == 'POST':
         art = Art.objects.get(id=art_id)

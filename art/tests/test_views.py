@@ -217,6 +217,62 @@ class ArtViewsTests(TestCase):
 
         self.assertEqual(resp.status_code, 200)
 
+    def test_unlike_art_post(self):
+        """
+            test a post request to the unlike view authenticated
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+        category = fixtures.create_category(name='Test Category')
+
+        #HACK: create the art directory for the user that matches what we insert into the db
+        os.system('mkdir test_photos/art/%s' % user.id)
+        os.system('cp art/tests/resources/test_photo.jpg test_photos/art/%s/' % user.id)
+
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+
+        url = reverse("art.views.unlike_art", args=(art.id, ))
+        resp = self.client.post(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+    def test_unlike_art_get(self):
+        """
+            test a get request to the unlike view authenticated
+        """
+        user = fixtures.create_user(
+            username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+        self.client.login(username=user.username, password='password')
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+        category = fixtures.create_category(name='Test Category')
+
+        #HACK: create the art directory for the user that matches what we insert into the db
+        os.system('mkdir test_photos/art/%s' % user.id)
+        os.system('cp art/tests/resources/test_photo.jpg test_photos/art/%s/' % user.id)
+
+        art = fixtures.create_art(
+            user_id=user.id, category=category.id, photo=('test_photos/art/%s/test_photo.jpg' % user.id), title='Test Art', description='Some art'
+        )
+
+        like = fixtures.create_art_like(user_id=user.id, art_id=art.id)
+
+        url = reverse("art.views.unlike_art", args=(art.id, ))
+        resp = self.client.get(url)
+
+        self.assertEqual(resp.status_code, 405)
+
     def test_handle_art_activation_authenticated_post_artist(self):
         """
             test a post request to the handle_art_activation authenticated with an artist user
