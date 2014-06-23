@@ -168,6 +168,9 @@ def change_password(request):
                 secure_password = hashers.make_password(new_password)
                 user.password = secure_password
                 user.save()
+                email_message = "Your password was changed successfully, if you did not change it, than this is bad!!!"
+                msg = EmailMultiAlternatives('Password Change', email_message , 'liwimail2014@gmail.com', [user.email])
+                resp = msg.send()
                 messages.add_message(request, messages.SUCCESS, 'Password changed successfully')
                 return HttpResponseRedirect('/account/')
             else:
