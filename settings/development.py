@@ -120,10 +120,10 @@ AUTH_USER_MODEL = 'registration.User'
 LOGIN_URL = '/login'
 
 if TESTING:
-    MEDIA_ROOT = '/Users/kcshafer/workspace/liwi/test_photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/Users/kcshafer/workspace/liwi/photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend

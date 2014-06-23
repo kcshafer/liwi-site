@@ -25,9 +25,6 @@ AWS_SECRET_ACCESS_KEY = 'CGnLlNQvuSjvJDUdtQqjITdAFDcVP7m7gCEJqInU'
 AWS_SES_REGION_NAME = 'us-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 TESTING = 'test' in sys.argv
 
 TEMPLATE_DEBUG = True
