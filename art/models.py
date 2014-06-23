@@ -13,6 +13,7 @@ class Art(models.Model):
     title = models.CharField(max_length=80)
     description = models.TextField()
     category = models.CharField(max_length=80)
+    active = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'art'
