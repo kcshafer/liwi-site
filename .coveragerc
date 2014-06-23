@@ -3,4 +3,4 @@
 # =========================================================================
 
 [run]
-omit = /usr/*, /Library/*, /System/*, */tests/*
+omit = /usr/*, /Library/*, /System/*, */tests/*, */migrations/*
