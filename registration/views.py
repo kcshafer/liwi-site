@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.template import loader, RequestContext
+from django.shortcuts import render_to_response
 
 from registration.forms import CustomerRegistration, SellerRegistration, AccountForm
 from registration.models import User, SecurityAnswer
@@ -55,10 +56,15 @@ def artlover_form(request):
             html_email = "<a href='http://ec2-54-213-188-46.us-west-2.compute.amazonaws.com/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
-        messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
-        return HttpResponseRedirect('/login/')
+            messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
+            return HttpResponseRedirect('/login/')
+        else:
+            template = loader.get_template('registration/buyer_form.html')
+            context = RequestContext(request, {'user_form': user_form})
+            return HttpResponse(template.render(context))
+
     else:
-        user_form = SellerRegistration(initial={'is_artist':False})
+        user_form = CustomerRegistration(initial={'is_artist':False})
         template = loader.get_template('registration/buyer_form.html')
         context = RequestContext(request, {'user_form': user_form})
         return HttpResponse(template.render(context))        
@@ -92,8 +98,12 @@ def seller_form(request):
             html_email = "<a href='http://ec2-54-213-188-46.us-west-2.compute.amazonaws.com/registration/activate/%s'>Activate</a>" % (user.id)
             msg.attach_alternative(html_email, "text/html")
             resp = msg.send()
-        messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
-        return HttpResponseRedirect('/login/')
+            messages.add_message(request, messages.SUCCESS, 'Account created, an email was sent to your email with instructions to activate your account.')
+            return HttpResponseRedirect('/login/')
+        else:
+            template = loader.get_template('registration/register.html')
+            context = RequestContext(request, {'user_form': user_form})
+            return HttpResponse(template.render(context))
     else:
         user_form = SellerRegistration(initial={'is_artist':True})
         template = loader.get_template('registration/register.html')

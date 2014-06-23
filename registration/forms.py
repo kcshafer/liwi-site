@@ -17,13 +17,18 @@ class CustomerRegistration(forms.ModelForm):
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
 
     def clean(self):
-        super(CustomerRegistration, self).clean() #if necessary
+        cleaned_data = super(CustomerRegistration, self).clean() #if necessary
+        email = cleaned_data.get('email')
+        if User.objects.all().filter(email=email):
+            self._errors["email"] = self.error_class(['This email is already registered.'])
+            del cleaned_data['email']
+
         try:
             del self._errors['secret_question']
         except:
             pass
 
-        return self.cleaned_data
+        return cleaned_data
 
 class SellerRegistration(forms.ModelForm):
 
@@ -37,13 +42,18 @@ class SellerRegistration(forms.ModelForm):
         fields = ('username', 'email', 'password', 'first_name', 'last_name')
 
     def clean(self):
-            super(SellerRegistration, self).clean() #if necessary
+            cleaned_data = super(SellerRegistration, self).clean() #if necessary
+            email = cleaned_data.get('email')
+            if User.objects.all().filter(email=email):
+                self._errors["email"] = self.error_class(['This email is already registered.'])
+                del cleaned_data['email']
+
             try:
                 del self._errors['secret_question']
             except:
                 pass
                 
-            return self.cleaned_data
+            return cleaned_data
 
 class AccountForm(forms.ModelForm):
 
