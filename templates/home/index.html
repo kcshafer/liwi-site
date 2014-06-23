@@ -7,10 +7,12 @@
 
     <body>
         {% include 'home/navigation.html' %}
+        {% if not user.is_authenticated %}
         <div class="jumbotron" style="width: 800px">
 			<h1>LiWi</h1>
 			<p>Like it, Love it, Want it</p>
 			<p><a href="/registration/" class="btn btn-primary btn-lg" role="button">Get Started</a></p>
 		</div>
+        {% endif %}
     </body>
 </html>
