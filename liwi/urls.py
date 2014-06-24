@@ -18,7 +18,9 @@ urlpatterns = patterns('',
     url(r'^account/save/', 'registration.views.save_account', name='save_account'),
     url(r'^account/changepassword/', 'registration.views.change_password', name='change_password'),
     url(r'^account/', 'registration.views.view_account', name='view_settings'),
-    url(r'^myart', 'art.views.my_art_admin', name='my_art_admin'),
+    url(r'^myart/', 'art.views.my_art_admin', name='my_art_admin'),
+    url(r'contact/send/', 'home.views.contact_send', name='contact send'),
+    url(r'contact/', 'home.views.contact', name='contact us'),
 
     #complex views
     url(r'^admin/', include(admin.site.urls)), # admin app
