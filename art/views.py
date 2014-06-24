@@ -26,7 +26,7 @@ def index(request):
         liked_art_ids = []
         for la in liked_art:
             liked_art_ids.append(la.art_id)
-        art = Art.objects.all()
+        art = Art.objects.all().filter(active=True)
         tags = cache.get('tags')
         if not tags:
             tags = Tag.objects.all().values('name')
