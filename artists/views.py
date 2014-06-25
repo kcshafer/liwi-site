@@ -9,6 +9,7 @@ from django.template import loader, RequestContext
 from artists.forms import FeaturedArtistForm
 from artists.models import FeaturedArtist
 from registration.models import User
+from user_profile.models import Profile
 
 log = logging.getLogger('liwi')
 
@@ -43,16 +44,16 @@ def get_featured(request):
 @login_required
 def get_featured_register(request):
     if request.method == 'POST':
-        print request.POST
         user_id = request.session.get('user_id')
         fa_form = FeaturedArtistForm(request.POST)
-        print fa_form.__dict__
         if fa_form.is_valid():
+            user_profile = Profile.objects.get(user_id=user_id)
             featured_artist = fa_form.save(commit=False)
             featured_artist.user_id = user_id
             featured_artist.active = True
             featured_artist.last_imprint = datetime.now()
             featured_artist.total_imprints = 0
+            featured_artist.photo = user_profile.photo
             featured_artist.save()
             messages.add_message(request, messages.SUCCESS, 'Registered as a featured artist!')
             return HttpResponseRedirect('/')

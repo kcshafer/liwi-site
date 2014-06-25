@@ -3,10 +3,75 @@
     <head>
         <title>Register</title>
         {% include 'home/header.html' %}
+        {% load staticfiles %}
+        <script src="{% static "js/freewall.js" %}"></script>
+        <style type="text/css">
+            body {
+                background: rgba(231, 231, 231, 0.43);
+            }
+            .free-wall {
+                margin: 15px;
+            }
+            .brick {
+                width: 221.2px;
+            }
+            .info {
+                padding: 15px;
+                color: #333;
+            }
+            .brick img {
+                margin: 0px;
+                padding: 0px;
+                display: block;
+            }
+            body {
+            background: #e8e8e8;
+            font-family: 'Helvetica Neue', Helvetica, Arial;
+        }
+
+        .brick {
+            background: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
+            border-radius: 3px;
+            color: #333;
+            border: none;
+        }
+
+
+        .brick .img {
+            width: 100%;
+            max-width: 100%;
+            display: block;
+        }
+
+        .brick h3, .brick h5 {
+            text-shadow: none;
+        }
+
+        .username {
+            /*margin-bottom: 5px !important;*/
+            font-size: 18px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        </style>
     </head>
 
     <body>
         {% include 'home/navigation.html' %}
+        <h3>Featured Artists</h3>
+        <div id="freewall" class="free-wall">
+            {% for a in featured_artists %}
+                <div class="brick">
+                    <a href="/profile/view/{{ a.user_id }}"><img src="{{ MEDIA_URL }}{{ a.photo }}" width="100%"/></a>
+                    <div class="info">
+                        <div class="username">{{ a.user.username }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
         {% if not user.is_authenticated %}
         <div class="jumbotron" style="width: 800px">
 			<h1>LiWi</h1>
@@ -14,5 +79,22 @@
 			<p><a href="/registration/" class="btn btn-primary btn-lg" role="button">Get Started</a></p>
 		</div>
         {% endif %}
+
+     <script>
+        var wall = new freewall("#freewall");
+            wall.reset({
+                selector: '.brick',
+                animate: true,
+                cellW: 200,
+                cellH: 'auto',
+                onResize: function() {
+                    wall.fitWidth();
+                }
+            });
+
+            wall.container.find('.brick img').load(function() {
+                wall.fitWidth();
+            });
+        </script>
     </body>
 </html>

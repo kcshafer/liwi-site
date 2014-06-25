@@ -57,8 +57,8 @@ def create_secret_answer(user_id, question_id, answer):
         user_id=user_id, security_questions_id=question_id, answer=answer
     )
 
-def create_featured_artist(user_id, start_date, end_date, active=True, last_imprint=datetime.now(), total_imprints=0):
+def create_featured_artist(user_id, start_date, end_date,photo, active=True, last_imprint=datetime.now(), total_imprints=0):
     return FeaturedArtist.objects.create(
         user_id=user_id, start_date=start_date, end_date=end_date, active=active, last_imprint=last_imprint,
-        total_imprints=0
+        total_imprints=0, photo=photo
     )

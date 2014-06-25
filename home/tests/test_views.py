@@ -1,3 +1,6 @@
+from datetime import datetime
+from datetime import timedelta
+
 from django.core.urlresolvers import reverse
 from django.test.client import Client
 from django.test import TestCase
@@ -16,7 +19,17 @@ class HomeViewsTests(TestCase):
         """
             test a get request to the index view
         """
+        for i in range(1, 10):
+            user = fixtures.create_user(
+                username='test_user' + str(i), password='password', email='user' + str(i) + '@test.com', first_name='test', last_name='user'
+            )
 
+            start = datetime.today()
+            end = start + timedelta(days=10)
+
+            fa = fixtures.create_featured_artist(
+                user_id=user.id, start_date=start, end_date=end, photo='\whatever'
+            )
         url = reverse('home.views.index')
         resp = self.client.get(url)
 

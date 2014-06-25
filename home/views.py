@@ -5,11 +5,14 @@ from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.template import loader, RequestContext
 
+from artists.lib.featured_artist import retrieve_featured_artists
+
 log = logging.getLogger('liwi')
 
 def index(request):
     template = loader.get_template('home/index.html')
-    context = RequestContext(request)
+    featured_artists = retrieve_featured_artists(5)
+    context = RequestContext(request, {'featured_artists': featured_artists})
     return HttpResponse(template.render(context))
 
 def contact(request):

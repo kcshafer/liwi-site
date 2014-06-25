@@ -56,7 +56,7 @@ class ArtistViewsTests(TestCase):
         end = start + timedelta(days=10)
 
         fa = fixtures.create_featured_artist(
-            user_id=user.id, start_date=start, end_date=end
+            user_id=user.id, start_date=start, end_date=end, photo='\whatever'
         )
 
         self.client.login(username=user.username, password='password')
@@ -105,6 +105,10 @@ class ArtistViewsTests(TestCase):
 
         user = fixtures.create_user(
             username='test_user', password='password', email='user@test.com', first_name='test', last_name='user'
+        )
+
+        user_profile = fixtures.create_user_profile(
+            user_id=user.id, twitter='test_handle', bio='test_bio', photo=('test_photos/user/%s/test_user.jpg' % user.id)
         )
 
         self.client.login(username=user.username, password='password')
