@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from django.contrib.auth.hashers import make_password
 
+from artists.models import FeaturedArtist
 from art.models import Art, Like, Category, Tag, ArtTag
 from registration.models import User, SecurityQuestion, SecurityAnswer
 from user_profile.models import Profile
@@ -52,4 +55,10 @@ def create_security_question(question):
 def create_secret_answer(user_id, question_id, answer):
     return SecurityAnswer.objects.create(
         user_id=user_id, security_questions_id=question_id, answer=answer
+    )
+
+def create_featured_artist(user_id, start_date, end_date, active=True, last_imprint=datetime.now(), total_imprints=0):
+    return FeaturedArtist.objects.create(
+        user_id=user_id, start_date=start_date, end_date=end_date, active=active, last_imprint=last_imprint,
+        total_imprints=0
     )

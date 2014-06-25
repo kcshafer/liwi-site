@@ -3,9 +3,7 @@ import logging
 from django.contrib import auth, messages
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from authentication.forms import LoginForm

@@ -8,7 +8,6 @@ from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.template import loader, RequestContext
-from django.shortcuts import render_to_response
 
 from registration.forms import CustomerRegistration, SellerRegistration, AccountForm
 from registration.models import User, SecurityAnswer

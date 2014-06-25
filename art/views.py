@@ -2,12 +2,10 @@ import ast
 import logging
 
 from django.contrib import messages
-from django.shortcuts import render
 from django.core.cache import cache
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render, redirect
 from django.template import loader, RequestContext
 
 from art.forms import ArtForm
@@ -76,7 +74,6 @@ def upload(request):
         if art_form.is_valid():
             art = art_form.save(commit=False)
             category = ast.literal_eval(art_form['categories'].value())
-            print art_form.cleaned_data
             art.category = category.get('name')
             art.user_id = user_id
             art.save()
