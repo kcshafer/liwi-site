@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from artists.models import FeaturedArtist
+
+admin.site.register(FeaturedArtist)

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register</title>
+        {% include 'home/header.html' %}
+    </head>
+
+    <body>
+        {% include 'home/navigation.html' %}
+
+        <form id="user_form" method="post" action="/artists/getfeatured/register/"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ fa_form.as_p }}
+
+            <!-- Provide a button to click to submit the form. -->
+            <input type="submit" name="submit" value="Submit" />
+        </form>
+
+        <script>
+           $(function() {
+             $(".date_field").datepicker();
+           });
+        </script>
+    </body>
+</html>

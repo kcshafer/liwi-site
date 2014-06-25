@@ -17,7 +17,10 @@
         <li class="active"><a href="/">Home</a></li>
         <li><a href="/artists">Discover Artists</a></li>
         <li><a href="/art/">Discover Art</a></li>
+        {% if user.is_artist %}
+          <li><a href="/artists/getfeatured/">Get Featured</a></li>
         <li><a href="/contact/">Contact Us</a></li>
+        {% endif %}
       </ul>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
