@@ -10,5 +10,26 @@
         <img src="{{ art.photo.url }}" height="400"/>
         {{ art.title }}
         {{ art.description }}
+        <button type="button" class="btn btn-default btn-md add_cart" id="{{ art.id }}">Add To Cart</button>
+        <script>
+            $("body").on('click', ".add_cart", function(){
+                   btn = this;
+                   $.ajax({
+                        type:"POST",
+                        beforeSend: function (xhr, settings)
+                        {
+                            xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                        },
+                        url: "/cart/add/" + this.id + '/',
+                        success: function() {
+                            new PNotify({
+                                title: 'Added to Cart',
+                                text: 'Your item has been saved so you can keep looking around until you are all done!',
+                                type: 'success'
+                            });
+                        }
+                })
+            });
+        </script>
     </body>
 </html>
