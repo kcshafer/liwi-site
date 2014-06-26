@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register</title>
+        {% include 'home/header.html' %}
+
+    </head>
+
+    <body>
+        {% include 'home/navigation.html' %}
+
+        <h2>Your Cart</h2>
+        <p>Created on {{ cart.created_date }}</p>
+        <table>
+            {% for cli in cart_items %}
+                <tr>
+                    <td>{{ cli.art.title }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

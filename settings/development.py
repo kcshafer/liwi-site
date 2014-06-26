@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'user_profile',
     'art',
     'artists',
+    'cart',
 )
 
 MIDDLEWARE_CLASSES = (

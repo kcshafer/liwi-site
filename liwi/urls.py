@@ -28,6 +28,7 @@ urlpatterns = patterns('',
     url(r'^profile/', include('user_profile.urls')), #user profile app
     url(r'^art/', include('art.urls')), # art app
     url(r'^artists/', include('artists.urls')), # artists app
+    url(r'^cart/', include('cart.urls')), #shopping cart app
 
 )
 

@@ -4,6 +4,7 @@ from django.contrib.auth.hashers import make_password
 
 from artists.models import FeaturedArtist
 from art.models import Art, Like, Category, Tag, ArtTag
+from cart.models import Cart, CartLineItem
 from registration.models import User, SecurityQuestion, SecurityAnswer
 from user_profile.models import Profile
 
@@ -62,3 +63,9 @@ def create_featured_artist(user_id, start_date, end_date,photo, active=True, las
         user_id=user_id, start_date=start_date, end_date=end_date, active=active, last_imprint=last_imprint,
         total_imprints=0, photo=photo
     )
+
+def create_cart(session_key, user_id=None):
+    return Cart.objects.create(user_id=user_id, session_key=session_key)
+
+def create_cart_line_item(cart_id, art_id):
+    return CartLineItem.objects.create(cart_id=cart_id, art_id=art_id)
