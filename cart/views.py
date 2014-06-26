@@ -1,7 +1,7 @@
 import logging
 
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.db.models import Sum, Q
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from django.template import loader, RequestContext
 
@@ -23,8 +23,8 @@ def view_cart(request):
         cart = Cart.objects.create(session_key=session_key, user_id=user_id)
 
     cart_items = CartLineItem.objects.all().filter(cart_id=cart.id).select_related('art__title')
-
-    context = RequestContext(request, {'cart': cart, 'cart_items': cart_items})
+    cart_aggr = Cart.objects.aggregate(Sum('cartlineitem__art__price'))
+    context = RequestContext(request, {'cart': cart, 'cart_items': cart_items, 'cart_aggr': cart_aggr})
     template = loader.get_template('cart/view_cart.html')
 
     return HttpResponse(template.render(context))

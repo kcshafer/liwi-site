@@ -14,6 +14,7 @@ class Art(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=80)
     active = models.BooleanField(default=True)
+    price = models.DecimalField(decimal_places=2, max_digits=12)
 
     class Meta:
         db_table = 'art'

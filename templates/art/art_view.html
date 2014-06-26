@@ -10,6 +10,7 @@
         <img src="{{ art.photo.url }}" height="400"/>
         {{ art.title }}
         {{ art.description }}
+        {{ art.price }}
         <button type="button" class="btn btn-default btn-md add_cart" id="{{ art.id }}">Add To Cart</button>
         <script>
             $("body").on('click', ".add_cart", function(){

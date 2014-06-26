@@ -15,8 +15,13 @@
             {% for cli in cart_items %}
                 <tr>
                     <td>{{ cli.art.title }}</td>
+                    <td>${{ cli.art.price }}</td>
                 </tr>
             {% endfor %}
+            <tr style="border-top: 1px solid black;">
+                <td>Total:  </td>
+                <td>${{ cart_aggr.cartlineitem__art__price__sum }}</td>
+            </tr>
         </table>
     </body>
 </html>
