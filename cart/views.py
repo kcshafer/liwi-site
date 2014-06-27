@@ -14,16 +14,24 @@ def view_cart(request):
     session_key = request.session.session_key
     cart = None
     cart_items = []
+    cart_aggr = None
 
     if Cart.objects.filter(user_id=user_id).exists():
         cart = Cart.objects.get(user_id=user_id)
     elif Cart.objects.filter(session_key=session_key).exists():
         cart = Cart.objects.get(session_key=session_key)
     else:
-        cart = Cart.objects.create(session_key=session_key, user_id=user_id)
+        if user_id:
+            cart = Cart.objects.create(user_id=user_id)
+        else:
+            cart = Cart.objects.create(session_key=session_key)
 
     cart_items = CartLineItem.objects.all().filter(cart_id=cart.id).select_related('art__title')
-    cart_aggr = Cart.objects.aggregate(Sum('cartlineitem__art__price'))
+    if user_id:
+        cart_aggr = Cart.objects.filter().aggregate(Sum('cartlineitem__art__price'))
+    else:
+        cart_aggr = Cart.objects.filter(session_key=session_key).aggregate(Sum('cartlineitem__art__price'))
+
     context = RequestContext(request, {'cart': cart, 'cart_items': cart_items, 'cart_aggr': cart_aggr})
     template = loader.get_template('cart/view_cart.html')
 
@@ -40,7 +48,10 @@ def add_to_cart(request, art_id):
     elif Cart.objects.filter(session_key=session_key).exists():
         cart = Cart.objects.get(session_key=session_key)
     else:
-        cart = Cart.objects.create(session_key=session_key, user_id=user_id)
+        if user_id:
+            cart = Cart.objects.create(user_id=user_id)
+        else:
+            cart = cart.objects.create(session_key=session_key)
 
     cli = CartLineItem.objects.create(cart_id=cart.id, art_id=art_id)
 

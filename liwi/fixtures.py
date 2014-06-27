@@ -25,13 +25,14 @@ def create_user(username, password, email, first_name, last_name, is_artist=True
 def create_category(name):
     return Category.objects.create(name=name)
 
-def create_art(user_id, category, photo, title, description, active=True):
+def create_art(user_id, category, photo, title, description, active=True, price=10.00):
     return Art.objects.create(user_id=user_id,
                               category=category,
                               photo=photo,
                               title=title,
                               description=description,
-                              active=active
+                              active=active,
+                              price=price
                               )
 
 def create_tag(name):

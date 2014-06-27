@@ -120,5 +120,5 @@ def handle_art_activation(request, art_id):
         art.save()
         return HttpResponse('Deactivate' if art.active is True else 'Activate')
     else:
-        log.warn("Unauthorized post request made to art activate view")
+        log.warn("Unauthorized get request made to art activate view")
         return HttpResponseNotAllowed(['POST'], 'Unauthorized Request.')
