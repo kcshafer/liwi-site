@@ -27,9 +27,9 @@ AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
 
 TESTING = 'test' in sys.argv
 
+DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['*']
 
 # Application definition
 
