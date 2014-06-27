@@ -17,7 +17,7 @@ def view_profile(request, user_id):
     user = User.objects.get(id=user_id)
     profile = Profile.objects.get(user_id=user_id)
     art = Art.objects.all().filter(user_id=user_id)
-    liked_art = Like.objects.filter(user_id=user.id).values('art__title', 'art__photo')
+    liked_art = Like.objects.filter(user_id=user.id).values('art__title', 'art__photo', 'art__id')
     template = loader.get_template('user_profile/view_profile.html')
     context = RequestContext(request, {'usr': user, 'profile': profile, 'art': art, 'liked_art': liked_art})
 

@@ -97,7 +97,7 @@
         <div class="free-wall">
         {% for a in liked_art %}
             <div class="brick">
-                <a href="/art/view/{{ a.id }}"><img src="{{ MEDIA_URL }}{{ a.art__photo }}" width="100%"/></a>
+                <a href="/art/view/{{ a.art__id }}"><img src="{{ MEDIA_URL }}{{ a.art__photo }}" width="100%"/></a>
                 <div class="info">
                     <div class="art_title">{{ a.art__title }}</div>
                 </div>
