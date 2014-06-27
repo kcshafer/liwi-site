@@ -1,2 +1,4 @@
 django-ses
 south
+pillow
+psycopg2
