@@ -25,11 +25,15 @@ AWS_SECRET_ACCESS_KEY = 'CGnLlNQvuSjvJDUdtQqjITdAFDcVP7m7gCEJqInU'
 AWS_SES_REGION_NAME = 'us-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
 
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
+
 TESTING = 'test' in sys.argv
 
 TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -74,15 +78,15 @@ DATABASES = {
         'NAME': 'liwi',
         'USER': 'kshafer',
         'PASSWORD': 'Rubygem14',
-        'HOST': 'liwi-development.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
+        'HOST': 'localhost',
         'PORT': '5432',
     },
     'liwi_test': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'liwi_test',
-        'USER': 'kshafer',
-        'PASSWORD': 'Rubygem14',
-        'HOST': 'liwi-development.c2mw5t19dwbx.us-west-2.rds.amazonaws.com',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -116,13 +120,11 @@ AUTH_USER_MODEL = 'registration.User'
 
 LOGIN_URL = '/login'
 
-SITE_ROOT = '/home/ubuntu/liwi-site'
-
 if TESTING:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/test_photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
+    MEDIA_ROOT = '/Users/kshafer/workspace/liwi/photos/'
     MEDIA_URL = '/photos/'
 
 #if testing, send messages with a file based backend
@@ -132,49 +134,3 @@ if TESTING:
     EMAIL_FILE_PATH = 'mail/' 
 else:
     EMAIL_BACKEND = 'django_ses.SESBackend'
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-    },
-    'handlers': {
-        'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
-        },
-        'logfile': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': SITE_ROOT + "/logfile.txt",
-            'maxBytes': 50000,
-            'backupCount': 2,
-            'formatter': 'standard',
-        },
-        'console':{
-            'level':'INFO',
-            'class':'logging.StreamHandler',
-            'formatter': 'standard'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers':['console'],
-            'propagate': True,
-            'level':'WARN',
-        },
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'liwi': {
-            'handlers': ['console', 'logfile'],
-            'level': 'DEBUG',
-        },
-    }
-}
