@@ -7,5 +7,3 @@ urlpatterns = patterns('',
     url(r'getfeatured/register/', views.get_featured_register, name='get_featured_register'),
     url(r'getfeatured/', views.get_featured, name='index'),
     )
-
-pass
