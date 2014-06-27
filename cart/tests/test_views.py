@@ -111,5 +111,64 @@ class CartViewsTests(TestCase):
 
         self.assertEqual(resp.status_code, 200)
 
+    def test_remove_from_cart(self):
+        """
+            test removing an item from cart successfully
+        """
+
+        user = fixtures.create_user(
+            username='test_user', email="test@user.com", password='password', first_name='Test', last_name='User'
+        )
+
+        artist_user = fixtures.create_user(
+            username='test_user2', email="test@user.com", password='password', first_name='Test', last_name='User'
+        )
+        self.client.login(username=user.username, password='password')
+
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        cart = fixtures.create_cart(session_key=s._session_key, user_id=user.id)
+
+        art = fixtures.create_art(user_id=artist_user.id, category='test', photo='/whatever/', title='test art', description='test art')
+
+        cli = fixtures.create_cart_line_item(cart_id=cart.id, art_id=art.id)
+
+        url = reverse('cart.views.remove_from_cart', args=(cli.id, ))
+        resp = self.client.post(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+    def test_empty_cart(self):
+        """
+            test empty =cart successfully
+        """
+
+        user = fixtures.create_user(
+            username='test_user', email="test@user.com", password='password', first_name='Test', last_name='User'
+        )
+
+        artist_user = fixtures.create_user(
+            username='test_user2', email="test@user.com", password='password', first_name='Test', last_name='User'
+        )
+        self.client.login(username=user.username, password='password')
+
+        s = self.client.session
+        s['user_id'] = user.id
+        s.save()
+
+        cart = fixtures.create_cart(session_key=s._session_key, user_id=user.id)
+
+        art = fixtures.create_art(user_id=artist_user.id, category='test', photo='/whatever/', title='test art', description='test art')
+
+        cli = fixtures.create_cart_line_item(cart_id=cart.id, art_id=art.id)
+
+        url = reverse('cart.views.empty_cart')
+        resp = self.client.post(url)
+
+        self.assertEqual(resp.status_code, 200)
+
+
 
 

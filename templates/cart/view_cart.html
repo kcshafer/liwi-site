@@ -11,17 +11,73 @@
 
         <h2>Your Cart</h2>
         <p>Created on {{ cart.created_date }}</p>
+        <button type="button" class="btn btn-default btn-lg" id="empty-cart-btn">
+          <span class="glyphicon glyphicon-trash"></span> Empty Cart
+        </button>
         <table>
             {% for cli in cart_items %}
-                <tr>
-                    <td>{{ cli.art.title }}</td>
-                    <td>${{ cli.art.price }}</td>
+                <tr id="cli-{{ cli.id }}" class="line-item">
+                    <td >{{ cli.art.title }}</td>
+                    <td>$<span id="{{ cli.id }}-price">{{ cli.art.price }}</span></td>
+                    <td><button type="button" id="{{ cli.id }}" class="btn btn-default btn-lg remove_cli">
+                                <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             <tr style="border-top: 1px solid black;">
                 <td>Total:  </td>
-                <td>${{ cart_aggr.cartlineitem__art__price__sum }}</td>
+                <td>$<span id="total-price">{{ cart_aggr.cartlineitem__art__price__sum }}</span></td>
             </tr>
         </table>
+        <script>
+            $(".remove_cli").click(function(){
+               var btn = this;
+               $.ajax({
+                    type:"POST",
+                    beforeSend: function (xhr, settings)
+                    {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    url: "/cart/remove/" + this.id + '/',
+                    success: function(r) {
+                        var total_price = $("#total-price").text();
+                        var this_price = $("#" + btn.id + "-price").text();
+                        var new_total = total_price - this_price;
+                        console.log(new_total);
+                        $("#total-price").text(parseFloat(new_total).toFixed(2));
+                        $("#cli-" + btn.id).remove();
+                        $("#total_price").text()
+                        new PNotify({
+                            title: 'Item Removed',
+                            text: 'The item has been removed successfully!',
+                            type: 'success'
+                        });
+                    }
+                })
+            });
+
+            $("#empty-cart-btn").click(function(){
+               var btn = this;
+               $.ajax({
+                    type:"POST",
+                    beforeSend: function (xhr, settings)
+                    {
+                        xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token}}');
+                    },
+                    url: "/cart/empty/",
+                    success: function() {
+                        $("#total-price").text(parseFloat(0.00).toFixed(2));
+                        $(".line-item").remove();
+                        $("#total_price").text()
+                        new PNotify({
+                            title: 'Cart Emptied',
+                            text: 'Time to fill it back up again!',
+                            type: 'success'
+                        });
+                    }
+                })
+            });
+        </script>
     </body>
 </html>

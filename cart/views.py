@@ -56,3 +56,22 @@ def add_to_cart(request, art_id):
     cli = CartLineItem.objects.create(cart_id=cart.id, art_id=art_id)
 
     return HttpResponse("added")
+
+def remove_from_cart(request, cli_id):
+    CartLineItem.objects.get(id=cli_id).delete()
+
+    return HttpResponse("Deleted")
+
+def empty_cart(request):
+    user_id = request.session.get('user_id', None)
+    session_key = request.session.session_key
+    cart = None
+
+    if Cart.objects.filter(user_id=user_id).exists():
+        cart = Cart.objects.get(user_id=user_id)
+    elif Cart.objects.filter(session_key=session_key).exists():
+        cart = Cart.objects.get(session_key=session_key)
+
+    CartLineItem.objects.all().filter(cart_id=cart.id).delete();
+
+    return HttpResponse('Emptied');
