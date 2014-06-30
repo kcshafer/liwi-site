@@ -25,6 +25,14 @@ AWS_SECRET_ACCESS_KEY = 'CGnLlNQvuSjvJDUdtQqjITdAFDcVP7m7gCEJqInU'
 AWS_SES_REGION_NAME = 'us-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.us-west-2.amazonaws.com'
 
+
+#s3 config
+AWS_S3_SECURE_URLS = False       # use http instead of https
+AWS_QUERYSTRING_AUTH = False     # don't add complex authentication-related query parameters for requests
+AWS_S3_ACCESS_KEY_ID = 'AKIAJEYC7OVXICWHIFMA'
+AWS_S3_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'liwi'
+
 TESTING = 'test' in sys.argv
 
 TEMPLATE_DEBUG = True
@@ -40,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'south',
     'registration',
     'authentication',
@@ -122,8 +131,8 @@ if TESTING:
     MEDIA_ROOT = '/home/ubuntu/liwi-site/test_photos/'
     MEDIA_URL = '/test_photos/'
 else:
-    MEDIA_ROOT = '/home/ubuntu/liwi-site/photos/'
-    MEDIA_URL = '/photos/'
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
 
 #if testing, send messages with a file based backend
 #NOTE: the run_tests script will create and tear down the mail directory

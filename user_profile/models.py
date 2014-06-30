@@ -1,7 +1,7 @@
 from django.db import models
 
 def upload_to(instance, filename):
-    return 'user/%s/%s' % (instance.user.id, filename)
+    return 'users/%s/%s' % (instance.user.id, filename)
 
 class Profile(models.Model):
     user = models.ForeignKey('registration.User')
