@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Virtual Room</title>
+        {% include 'home/header.html' %}
+        {%  load staticfiles %}
+        <script src="{% static "js/dropzone.js" %}"></script>
+        <script src="{% static "js/simpleGal.js" %}"></script>
+    </head>
+
+    <body>
+
+        {% include 'home/navigation.html' %}
+
+
+        <div class="main-image">
+          <div id="droppable">
+            <img src="" alt="Placeholder" class="custom" width="60%">
+          </div>
+        </div>
+
+        <ul class="thumbnails">
+          {% for f in files %}
+            <li><a href="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}"><img src="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}" alt="Thumbnails" width="80"></a></li>
+          {% endfor %}
+        </ul>
+
+        <h3>Art</h3>
+        <div id="draggable">
+          <img src="{{ art.photo.url }}" width="100px" />
+        </div>
+
+        <h1>Add Pictures</h1>
+        <form id="room_img_drop" action="/vroom/upload/" class="dropzone">
+            {% csrf_token %}
+        </form>
+        <script>
+          $(document).ready(function () {
+            $( "#draggable" ).draggable();
+            $( "#droppable" ).droppable({});
+            $('.thumbnails').simpleGal({
+              mainImage: '.custom'
+            });
+          });
+        </script>
+    </body>
+</html>

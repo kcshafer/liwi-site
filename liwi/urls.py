@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     url(r'^art/', include('art.urls')), # art app
     url(r'^artists/', include('artists.urls')), # artists app
     url(r'^cart/', include('cart.urls')), #shopping cart app
+    url(r'^vroom/', include('vroom.urls')), #virtual room app
 
 )
 
