@@ -18,7 +18,7 @@ def index(request, art_id):
         print "here"
         files = os.listdir('photos/temp/%s' % session_key)
     else:
-        os.mkdir('temp/%s' % session_key)
+        os.mkdir('photos/temp/%s' % session_key)
     
     context = RequestContext(request, {'files': files, 'session_key': session_key, 'art': art})
     template = loader.get_template('vr/virtual_room.html')
@@ -26,8 +26,8 @@ def index(request, art_id):
 
 def upload(request):
     session_key = request.session.session_key
-    data = request.FILES['file'] 
-    f = open('photos/temp/%s/test.jpg' % session_key, 'w+')
+    data = request.FILES['file']
+    f = open('photos/temp/%s/%s' % (session_key, data._name), 'w+')
     f.write(data.read())
     f.close()
 

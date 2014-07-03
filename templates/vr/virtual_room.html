@@ -8,40 +8,58 @@
         <script src="{% static "js/simpleGal.js" %}"></script>
     </head>
 
-    <body>
+<body>
 
-        {% include 'home/navigation.html' %}
+    {% include 'home/navigation.html' %}
 
 
-        <div class="main-image">
-          <div id="droppable">
+    <div class="main-image">
+        <div id="droppable">
             <img src="" alt="Placeholder" class="custom" width="60%">
-          </div>
         </div>
+    </div>
 
-        <ul class="thumbnails">
-          {% for f in files %}
-            <li><a href="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}"><img src="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}" alt="Thumbnails" width="80"></a></li>
-          {% endfor %}
-        </ul>
+    <ul id="room_photos" class="thumbnails">
+        {% for f in files %}
+            <li><a href="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f }}"><img src="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}" alt="Thumbnails" width="80"></a></li>
+        {% endfor %}
+    </ul>
 
-        <h3>Art</h3>
-        <div id="draggable">
-          <img src="{{ art.photo.url }}" width="100px" />
-        </div>
+    <h3>Art</h3>
+    <div id="draggable">
+        <img id="art_img" src="{{ art.photo.url }}" width="100px" />
+    </div>
 
-        <h1>Add Pictures</h1>
-        <form id="room_img_drop" action="/vroom/upload/" class="dropzone">
-            {% csrf_token %}
-        </form>
-        <script>
-          $(document).ready(function () {
+    <h1>Add Pictures</h1>
+    <form id="roomDropzone" action="/vroom/upload/" class="dropzone">
+        {% csrf_token %}
+    </form>
+    <script>
+        $(document).ready(function () {
             $( "#draggable" ).draggable();
             $( "#droppable" ).droppable({});
             $('.thumbnails').simpleGal({
               mainImage: '.custom'
             });
-          });
-        </script>
-    </body>
+
+            $('#draggableHelper').draggable({
+                containment: "#draggable",
+                scroll: false
+            });
+            $('#art_img').resizable();
+
+            Dropzone.options.roomDropzone = {
+                init: function() {
+                    this.on("success", function(file) { 
+                        $("#room_photos").append("<li><a href=\'{{ MEDIA_URL }}/temp/{{ session_key }}/" + file.name  + "\'><img src=\'{{ MEDIA_URL }}/temp/{{ session_key }}/" + file.name + "\' alt=\'Thumbnails\' width=\'80\'/></a></li>");
+                        $('.thumbnails').simpleGal({
+                            mainImage: '.custom'
+                        });
+                    });
+                }
+            };
+
+        });
+    </script>
+</body>
 </html>

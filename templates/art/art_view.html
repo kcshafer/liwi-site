@@ -12,6 +12,7 @@
         {{ art.description }}
         {{ art.price }}
         <button type="button" class="btn btn-default btn-md add_cart" id="{{ art.id }}">Add To Cart</button>
+        <button type="button" class="btn btn-default btn-md"><a href="/vroom/{{ art.id }}/">Virtual Room</a></button>
         <script>
             $("body").on('click', ".add_cart", function(){
                    btn = this;
