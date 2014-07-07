@@ -21,7 +21,7 @@
 
     <ul id="room_photos" class="thumbnails">
         {% for f in files %}
-            <li><a href="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f }}"><img src="{{ MEDIA_URL }}/temp/{{ session_key }}/{{ f}}" alt="Thumbnails" width="80"></a></li>
+            <li><a href="{{ MEDIA_URL }}/temp/{{ f }}"><img src="{{ MEDIA_URL }}/temp/{{ f}}" alt="Thumbnails" width="80"></a></li>
         {% endfor %}
     </ul>
 
@@ -51,7 +51,7 @@
             Dropzone.options.roomDropzone = {
                 init: function() {
                     this.on("success", function(file) { 
-                        $("#room_photos").append("<li><a href=\'{{ MEDIA_URL }}/temp/{{ session_key }}/" + file.name  + "\'><img src=\'{{ MEDIA_URL }}/temp/{{ session_key }}/" + file.name + "\' alt=\'Thumbnails\' width=\'80\'/></a></li>");
+                        $("#room_photos").append("<li><a href=\'{{ MEDIA_URL }}/temp/" + file.name  + "\'><img src=\'{{ MEDIA_URL }}/temp/" + file.name + "\' alt=\'Thumbnails\' width=\'80\'/></a></li>");
                         $('.thumbnails').simpleGal({
                             mainImage: '.custom'
                         });

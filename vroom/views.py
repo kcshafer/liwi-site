@@ -12,22 +12,15 @@ from registration.models import User
 
 def index(request, art_id):
     art = Art.objects.get(id=art_id)
-    session_key = request.session.session_key
-    files = []
-    if os.path.isdir('photos/temp/%s' % session_key):
-        print "here"
-        files = os.listdir('photos/temp/%s' % session_key)
-    else:
-        os.mkdir('photos/temp/%s' % session_key)
-    
-    context = RequestContext(request, {'files': files, 'session_key': session_key, 'art': art})
+        
+    context = RequestContext(request, {'art': art})
     template = loader.get_template('vr/virtual_room.html')
     return HttpResponse(template.render(context))
 
 def upload(request):
     session_key = request.session.session_key
     data = request.FILES['file']
-    f = open('photos/temp/%s/%s' % (session_key, data._name), 'w+')
+    f = open('photos/temp/%s' % (data._name), 'w+')
     f.write(data.read())
     f.close()
 
