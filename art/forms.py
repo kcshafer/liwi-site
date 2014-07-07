@@ -10,7 +10,7 @@ class ArtForm(forms.ModelForm):
 
     class Meta:
         model = Art
-        fields = ('photo', 'title', 'description', 'price')
+        fields = ('photo', 'title', 'description', 'price', 'height', 'width')
         exclude = ['user', 'category']
 
     def clean(self):

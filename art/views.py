@@ -76,6 +76,19 @@ def upload(request):
             category = ast.literal_eval(art_form['categories'].value())
             art.category = category.get('name')
             art.user_id = user_id
+            ### calculate art size ###
+            a = art.width * art.height
+            print a
+            if a > 0 and a < 5:
+                art.size = 's'
+            elif a >= 5 and a < 10:
+                art.size = 'm'
+            elif a >= 10 and a < 15:
+                art.size = 'l'
+            elif a >= 15:
+                art.size = 'xl'
+            #aspect ratio = width/height
+            art.shape = art.width/art.height
             art.save()
             for tag in art_form['tags'].value():
                 tag = ast.literal_eval(tag)

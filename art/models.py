@@ -15,6 +15,10 @@ class Art(models.Model):
     category = models.CharField(max_length=80)
     active = models.BooleanField(default=True)
     price = models.DecimalField(decimal_places=2, max_digits=12)
+    height = models.DecimalField(decimal_places=1, max_digits=12)
+    width = models.DecimalField(decimal_places=1, max_digits=12)
+    size = models.CharField(max_length=3)
+    shape = models.DecimalField(decimal_places=16, max_digits=17)
 
     class Meta:
         db_table = 'art'
