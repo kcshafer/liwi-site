@@ -66,9 +66,15 @@
            <li class="li-{{ tag }}"><a href="#" data-filter="{{  tag  }}" class="filter-btn">{{ tag }}</a></li>
         {% endfor %}
         </ul>
+        <ul class="nav nav-pills" id="filter_sizes">
+            <li class="li-s"><a href="#" data-filter="s" class="filter-btn">Small</a></li>
+            <li class="li-m"><a href="#" data-filter="m" class="filter-btn">Medium</a></li>
+            <li class="li-l"><a href="#" data-filter="l" class="filter-btn">Large</a></li>
+            <li class="li-xl"><a href="#" data-filter="xl" class="filter-btn">Extra Large</a></li>
+        </ul>
         <div id="freewall" class="free-wall">
         {% for a in art %}
-            <div class="brick {{ a.get_tags }}">
+            <div class="brick {{ a.get_tags }} {{ a.size }}">
                 <a href="/art/view/{{ a.id }}"><img src="{{ a.photo.url }}" width="100%" /></a>
                 <div class="info">
                     <div class="art_title">{{ a.title }}</div>
