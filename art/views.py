@@ -41,7 +41,7 @@ def my_art_admin(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     if user.is_artist:
-        art = Art.objects.values('title', 'id', 'photo', 'active').annotate(likes=Count('like'))
+        art = Art.objects.filter(user_id=user_id).values('title', 'id', 'photo', 'active').annotate(likes=Count('like'))
         tags = cache.get('tags')
         if not tags:
             tags = Tag.objects.all().values('name')
