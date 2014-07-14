@@ -73,8 +73,12 @@ def upload(request):
         art_form = ArtForm(request.POST, request.FILES)
         if art_form.is_valid():
             art = art_form.save(commit=False)
-            category = ast.literal_eval(art_form['categories'].value())
-            art.category = category.get('name')
+            #probably want to address this at some point to do it in a better manner
+            try:
+                category = ast.literal_eval(art_form['categories'].value())
+                art.category = category.get('name')
+            except:
+                pass
             art.user_id = user_id
             ### calculate art size ###
             a = art.width * art.height
